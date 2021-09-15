@@ -1,0 +1,1748 @@
+---
+title: "R ile Veri Görselleştirme ve Makine  Öğrenmesi Yöntemleri"
+author: "Github: Ozgurnrttn"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    df_print: paged
+  html_notebook:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message =F)
+```
+
+# Giriş
+
+
+İstatistik, belirli bir amaç için veri toplama, tablo ve grafiklerle özetleme, sonuçları yorumlama, sonuçların güven derecelerini açıklama, örneklerden elde edilen sonuçları kitle için genelleme, özellikler arasındaki ilişkiyi araştırma, çeşitli konularda geleceğe ilişkin tahmin yapma, deney düzenleme ve gözlem ilkelerini kapsayan bir bilimdir. Belirli bir amaç için verilerin toplanması, sınıflandırılması, çözümlenmesi ve sonuçlarının yorumlanması esasına dayanır. Blalock’a göre istatistik olayları tek tek ya da seyrek olarak ortaya çıkan olayları inceleyen bir dal değildir.
+
+**“İstatistik ile yalan söylemek kolaydır; istatistik olmadan gerçeği anlatmak zordur” (A. Dunkels)**
+
+**“Üç çeşit yalan vardır; yalan, kuyruklu yalan, istatistik.” (Benjamin Disraeli)**
+
+**“Yuvarlak sayılar her zaman yanlıştır” (Samuel Johnson)**
+
+**“İstatistiksel düşünme, gün gelecek tıpkı okuryazar olmak gibi iyi bir yurttaş olmanın en gerekli unsurlarından olacaktır” (H.G.Wells)**
+
+
+# Çalışmanın Amacı
+
+
+Big Data ile çalışmak, belirli veri analizi araçları, paketleri ve makine öğrenimi gibi gelişmiş teknikler gerektirir. Bu çalışma, büyük verileri keşfetmek, görselleştirmek, ve modellemek için R içerisinde bulunan araçların ve makine öğrenimi yöntemlerinin kullanımına ilişkin uygulamalı bir eğitim olacaktır.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(plotly)
+library(VIM)
+library(DataExplorer)
+library(Amelia)
+library(caret)
+library(AppliedPredictiveModeling)
+library(pls) #kismi en kucuk kareler ve pcr icin
+library(elasticnet)
+library(broom) #tidy model icin
+library(glmnet)
+library(MASS)
+library(ISLR)
+library(PerformanceAnalytics)
+library(funModeling)
+library(Matrix) 
+library(kernlab) #svm
+library(e1071) #svm icin
+library(rpart) #cart icin
+library(pgmm) #olive data seti icin 
+library(dslabs)
+library(rpart.plot) #rpart gorsel icin
+library(partykit) #karar agaci gorseli icin 
+library(ipred) #bagging icin 
+library(randomForest)
+library(gbm)
+library(nnet)
+library(neuralnet)
+library(GGally)
+library(NeuralNetTools) #garson fonksiyonu icin
+library(FNN)
+library(readr)
+library(factoextra)
+library(cluster)
+library(pROC)
+
+```
+
+
+# Big Data (Büyük Veri)
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/bigdata.jpg)
+
+**Big Data Nedir?**
+
+
+İnternet ve sosyal medya kullanımının yaygınlaşmasının, bilgi kavramının karşılığını da etkilediğini söylemek yanlış olmaz. Bilgiyi pek çok insan için çok daha hızlı ve kolay ulaşılabilir kılan internet, aynı zamanda ortaya ciddi ölçüde bilgi kirliliğinin çıkmasına da neden oluyor. Keza bu nedenle, internet pek çok kullanıcı tarafından "bilgi çöplüğü" olarak da anılıyor. 
+
+
+Esasen "çöplük" olarak tanımlanan havuz, içinde milyonlarca veri barındıran bir kaynak olarak değerlendiriliyor. Kullanıcıların bir akış üzerinden ileterek bu havuza gönderdikleri verilerin işlenebilir ve mantıksal bir düzlem çerçevesinde değerlendirilebilir olan bölümü, bazı yazılım ve şirketler tarafından bir araya getiriliyor. Ortaya çıkan bu anlamlı veriler bütünü, Büyük Veri (Big Data) kavramını oluşturuyor. Böylece ortaya pek çok araştırma için kaynak sağlayabilecek, sınıflandırılmaya uygun ve saklanabilir bir veri topluluğu çıkıyor.
+
+
+**Büyük Veri Nasıl Kullanılır?**
+
+
+Büyük veri, özellikle firmaların müşteri davranışlarını inceleyerek doğru kararlar almalarına ve stratejiler geliştirmelerine önemli katkılar sağlar. Eldeki veriler en sade ve işlenebilir hale getirildikten sonra, karşılaştırma yöntemi kullanılarak bu verilerin birbirleriyle olan ilişkileri incelenir ve aralarındaki bağlantılar ortaya çıkartılır. Bu sayede, alınacak olan kararların sonuçlarını önceden kestirmek mümkün olur. Verilerde yer alan çeşitli noktaların yerleri değiştirilerek oluşturulan simülasyonlarla, farklı kararlara verilecek tepkiler görülebilir.
+
+
+Büyük veri analizi sayesinde kurumlar, gerçek müşteri davranışlarına dayalı verileri doğru bir şekilde değerlendirip, yüksek faydaya sahip bir araca dönüştürebilirler.
+
+
+**Büyük Verinin Önemi**
+
+Büyük veri tamamen gerçek verilerin analizine dayandığı için maliyetleri düşürme, doğru kanallara reklam harcaması yapma, iş gücünden tasarruf sağlama ve beklentilere uygun ürün geliştirme gibi birçok farklı alanda doğru kararlar alınmasına olanak tanımaktadır.
+
+
+**Büyük Verinin Kullanım Alanları**
+
+Büyük veri, başta bankacılık ve perakende sektörü gibi müşteri davranışlarının çok fazla önem taşıdığı ve takip edilmesinin gerektiği sektörler olmak üzere her alanda kullanılabilmektedir. Son yıllarda büyük verinin önemi devletler tarafından da anlaşılmış ve çeşitli alanlarda kullanılmaya başlanmıştır. Sağlık alanında; hastalıkların erken teşhis edilmesi ya da ilaç geliştirilmesi gibi konularda kullanılan büyük veri, suçları önlemek amacıyla ya da eğitim sisteminde geliştirmeler yapmak amacıyla da kullanılabilmektedir.
+
+**Büyük Veri Bileşenleri Nelerdir?**
+
+
+**Büyük veriyi 5 ana bileşen oluşturmaktadır.**
+
+-* **Çeşitlilik (Variety):** Üretilen verilerin büyük bir kısmı, birbirinden farklı formata sahiptir. Telefonlardan, tabletlerden, bilgisayarlardan; farklı işletim sistemlerinden ya da dillerden gelen veriler birbirinden farklı formatların ortaya çıkmasına neden olmaktadır.
+
+- **Hız (Velocity):** Gün geçtikçe artan teknolojik imkanlar, elde edilen veri miktarının, yapılacak işlem sayısının ve çeşitliliğinin de aynı şekilde artmasına neden olmaktadır.
+
+- **Hacim (Volume):** Geçtiğimiz 10 yılda veri miktarı 40 kattan fazla bir artış göstermiş fakat veri depolama için yapılan harcamalar ise 1,5 kat artmıştır. Bu durum, elde edilen verinin doğru ve verimli şekilde depolanması için çok iyi bir kurgulama gerektiğini ortaya koymaktadır.
+
+- **Doğrulama (Verification):** Verilerle ilgili son yıllarda öne çıkan bir diğer konu, veri güvenliği ve doğruluğu olmuştur. Elde edilen verilerin kimler tarafından ve hangi şartlarda görüntüleneceği, bu verilerin hangilerinin gizli kalması gerektiği konuları, üzerinde dikkatle çalışılması gereken konulardır.
+
+- **Değer (Value):** Büyük veri ile ilgili en önemli bileşen, değerdir. Elde edilen ve işlenen veriler, kuruma değer kattığı sürece anlamlıdır. Bu nedenle, büyük verinin analizinin ve simülasyonlarının doğru şekilde kurgulanması ve büyük veriyi kullanan kuruma fayda sağlaması öncelikli olarak ele alınmalıdır.
+Büyük veri (big data) doğru kurgulandığı ve kullanıldığı takdirde, şirketlerin karar aşamalarında önemli faydalar sağlamakta ve şirketlere rekabet üstünlüğü sağlamaktadır. Bu durumun farkında olan şirketler; pazarlama, satış, üretim gibi birçok alanda büyük veriden faydalanmaktadırlar.
+
+
+# Veri Setleri
+
+
+## Carseats Veri Seti
+
+
+Araba koltuğu satışlarını tahmin etmeye çalışacağız. Bu veri setinde, tek bir gözlem, araba koltuklarının satıldığı bir yeri temsil eder. Özellikle eğitim veri seti aşağıdaki değişkenlerden oluşur:
+
+*Sales(Satışlar) - Her konumdaki birim satışlar (bin olarak)
+
+*CompPrice(Comp Fiyatı) - Rakip tarafından her bir lokasyonda alınan fiyat
+
+*Income(Gelir) - Topluluk gelir düzeyi (bin dolar olarak)
+
+*Advertising (Reklam) - Her lokasyondaki şirket için yerel reklam bütçesi (bin dolar olarak)
+
+*Population (Nüfus) - Bölgedeki nüfus büyüklüğü (bin olarak)
+
+*Price  - Her sitede araba koltukları için fiyat şirketi ücretleri
+
+*ShelveLoc - Her sitedeki araba koltukları için raf konumunun kalitesini gösteren Kötü, İyi ve Orta düzeyli bir faktör
+
+*Age(Yaş) - Yerel nüfusun ortalama yaşı
+
+*Education(Eğitim) - Her konumdaki eğitim seviyesi
+
+*Urban (Kentsel) - Mağazanın kentsel mi yoksa kırsal bir konumda mı olduğunu belirtmek için Hayır ve Evet seviyelerine sahip bir faktör
+
+*US(ABD) - Mağazanın ABD'de olup olmadığını belirtmek için Hayır ve Evet seviyelerine sahip bir faktör
+
+```{r, echo=FALSE}
+Carseats <- read_csv("C:/Users/Reddi/Desktop/MachineLearning/Carseats.csv")
+
+```
+
+
+```{r}
+as_tibble(Carseats)
+```
+
+```{r}
+summary(Carseats)
+```
+
+## World Happiness Report Veri Seti
+
+
+İlk Dünya Mutluluk Raporu, BM Yüksek Düzeyli Mutluluk ve refah toplantısını desteklemek üzere Nisan 2012’de yayınlandı. O zamandan beri dünya çok yol kat etti. Mutluluk gittikçe artan bir şekilde sosyal ilerlemenin ve kamu politikasının hedefi için uygun bir ölçü olarak görülmektedir. Haziran 2016’da OECD kendisini “insanların refahını hükümetlerin çabalarının merkezine koymak için büyüme anlatısını yeniden tanımlamayı” taahhüt etti. Şubat 2017’de Birleşik Arap Emirlikleri, Dünya Hükümeti Zirvesi kapsamında tam günlük bir Dünya Mutluluğu toplantısı düzenledi. Şimdi 20 Mart Dünya Mutluluk Günü’nde, bir kez daha Birleşmiş Milletler’de, tekrar Sürdürülebilir Kalkınma Çözümleri Ağı tarafından yayınlanan ve şimdi Ernesto Illy Vakfı’ndan cömert üç yıllık bir bağışla desteklenen Dünya Mutluluk Raporu 2017 oluşturuldu. Çalışmada 2021 yılı için mutluluk verileri kullanılmıştır.
+
+
+*Country.name(Ülke Adı)
+
+*Regional.indicator(Bölgesel Gösterge)
+
+*Ladder.score(Skor)
+
+*upperwhisker(Alt Sınır)
+
+*lowerwhisker (Üst Sınır)
+
+*Logged.GDP.per.capita(Kişi Başına Düşen GSYİH)
+
+*Social.support(Sosyal Destek)
+
+*Healthy.life.expectancy(Sağlıklı Yaşam Beklentisi)
+
+*Freedom.to.make.life.choices(Seçim Yapma Özgürlüğü)
+
+*Generosity(Cömertlik)
+
+*Perceptions.of.corruption(Yolsuzluk Algısı)
+
+*Dystopia(Anti Ütopya)
+
+
+```{r, echo=FALSE}
+world <- read_delim("C:/Users/Reddi/Desktop/MachineLearning/world-happiness-report-2021.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+```
+
+
+```{r}
+as_tibble(world)
+```
+
+
+```{r}
+summary(world)
+```
+
+
+# Eksik Gözlem Analizi
+
+
+## Carseats Verisi
+
+
+```{r}
+introduce(Carseats)
+```
+
+Carseats veri setinde eksik gözlem bulunmamaktadır.
+
+
+
+
+## World Happiness Report Verisi
+
+
+```{r}
+introduce(world)
+```
+
+World veri setinde eksik gözlem bulunmamaktadır. 
+
+
+# Veri Görselleştirme
+
+
+## Histogram
+
+
+Veri dağılımını özetlemenin en çok kullanılan yoludur. Veri genişliğini eşit uzunluktaki aralıklara bölerek gösterilir. En sık kullanılan grafik türlerinden biridir ve birbirinden farklı kategoriler-gruplar için sayı, frekans vb. bilgileri göstermek ve kıyaslamak için kullanılır.
+
+
+• Büyük veri kümelerinde kullanılır. 
+
+• Dağılım hakkında bilgi verir. 
+
+• Genellikle verini yoğunlaştığı konumları gösterir. 
+
+• Büyük veya küçük değerlere çarpık olması verilerde dönüşüm yapılabileceğini gösterir.
+
+
+```{r}
+ggplot(Carseats,aes(x = ShelveLoc , fill = US)) + 
+  geom_bar(aes(y = (..count..)), position = "dodge")+ geom_text(aes(y=(..count..), vjust = -0.5, label = ifelse((..count..)== 0 ,"", scales::percent((..count..)/sum(..count..)))), stat = "count")+
+  labs( x = "ShelveLoc ",
+        y = "Frekanslar",
+        title = "US'de Bulunma Durumana Göre Koltuk Kalitesi")
+```
+
+```{r}
+library(ggthemes)
+ggplot(Carseats) + aes(x = ShelveLoc, fill = US) + geom_bar(aes(y = (..count..)), position = "dodge")+ geom_text(aes(y=(..count..), vjust = 0.5, label = ifelse((..count..)== 0 ,"", scales::percent((..count..)/sum(..count..)))), stat = "count") +
+    scale_fill_brewer(palette = "Accent") + labs(title = "ShelveLoc Ve US durumu Cubuk Grafiği") +
+    ggthemes::theme_hc() + theme(legend.position = "top", axis.text.x = element_text(angle = 50,
+    vjust = 0.5)) + facet_wrap(vars(Urban), scales = "free")
+```
+
+
+```{r, warning=FALSE}
+plot <- Carseats %>% count(ShelveLoc, US)
+plot %>%plot_ly(x = ~ShelveLoc, y = ~n, color = ~US)
+```
+
+
+## Box Plot
+
+
+Verilerin çeyreklik değerlerine göre gösterimidir. Histogram ve nokta çizimleri farklı görünüme sahip olmakla birlikte veri ile ilgili yarıntılı bilgi verir. Konum, yayılım ve çarpıklık ile ilgili bilgi verir. Dağılımın kuyrukları ve bu kuyrukların yayılım ile ilgili bilgi verir. Uç değerleri görmek için olanaktır. Bu değerler aykırı değerde olabilir. Birden fazla veri kümesinin karşılaştırılmasına yararlıdır. Uç değerlere karşı dirençlidir. Grafiğin çizimi için ortanca, birinci ve üçüncü çeyrek değerleri hesaplanır ve
+
+$$DAG (Çeyrekler Arası Uzaklık)=d=Q_3-Q_1$$
+
+farkı bulunur. $Q_3$ ve $Q_1$ farkı arasında yatay veya dikey eksende kutu çizilir. Kutunun içine ortanca çizgisi çizilir ve her iki ucundan, $A=Q_1-1.5d$ ve $B=Q_3+ 1.5d$ Uzunlukları kuşkulu gözlem sınırları olarak tanımlar. Bunlara eşik değerleri denir.Uç değerler eşik değerlerinin dışında olur ve işaretler.
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/box.png)
+
+
+```{r}
+ggplot(data= Carseats)+geom_boxplot(mapping = aes(y=Sales,fill=ShelveLoc))+
+  labs(title = "Satış Değişkeninin Koltuk Tipi Göre Kutu Grafiği",y="Satış ",x="Koltuk Tipi")+ theme(legend.position = "none")
+```
+
+
+```{r, warning=FALSE}
+plot_ly(Carseats, y = ~Sales, color = ~ShelveLoc, type = "box")
+```
+
+
+## Saçılım Grafiği
+
+
+İki ya da daha çok değişken arasındaki çizimler, aykırı değerlerin varlığı bakımından, değişkenlerin birliktelikleri ya da bağımsızlıkları değişkenlerin etkinlikleri ve işlevsel yapı bakımından önemli bilgi verirler. İki değişken arasındaki ilişkinin yapısını ve yönünü verir.
+
+```{r} 
+ggplot(data=Carseats)+ geom_point(mapping = aes(x=CompPrice,y=Income,color=Urban))
+```
+
+
+
+```{r, warning=FALSE}
+plot_ly(data = Carseats, x = ~CompPrice, y = ~Income, color= ~Urban)
+```
+
+## Korelasyon Grafiği
+
+
+**İlişki Ölçüleri**
+
+Bir veri kümesindeki değişkenlerin bağımsızlıkları ve etkinlikleri bakımından, ilişki katsayıları kullanıla bilir.
+Kovaryans, iki değişkenin arasındaki birlikte değişim miktarını verir.
+
+$$Cov(X,Y)=∑(x_i-x ̅)(y_i-y ̅)/n$$
+
+İkiden çok değişken için kovaryans matrisi, pozitif tanımlıdır ve değişkenlerin birlikte değişim miktarı ile ilgili bilgi verir.
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/Correlation.png)
+
+**Pearson İlişki Katsayısı**
+
+İki nicel değişken arasında ilişkinin derecesini belirlemek için kullanılır.
+$$r_{XY}=Cov(X,Y)/S_X S_Y$$
+
+```{r}
+chart.Correlation(Carseats[c(1:6,8,9)], histogram=TRUE, pch=19)
+```
+
+
+## Pasta Grafiği
+
+
+Kategorik verileri görsel bir şekilde betimleyip özetlemek için hazırlanan; içindeki kategori dilimlerini orantısal olarak gösteren bir daire şeklinde sunulan bir gösterim aracıdır.
+
+```{r}
+ggplot(Carseats,aes(x = "", fill=US)) + 
+  geom_bar(width = 1)+ geom_text(aes(y=(..count..), vjust = -1.5, label = ifelse((..count..)== 0 ,"", scales::percent((..count..)/sum(..count..)))), stat = "count") + 
+  coord_polar (theta="y")
+```
+
+
+```{r}
+ggplot(data = Carseats) + 
+  geom_bar(mapping = aes(x = ShelveLoc, fill = ShelveLoc), show.legend = FALSE, width = 1) + 
+  theme(aspect.ratio = 1) +
+  labs(x = NULL, y = NULL)+ 
+  coord_flip()+ 
+  coord_polar()
+```
+
+
+## Bubble Charts
+
+
+Kabarcık grafiği, iki boyutlu verilerin kabarcıklarla veri noktaları ve verilerin ek boyutu da kabarcıkların boyutuyla temsil edilen dağılım grafiğinin bir çeşididir. Dağılım grafiği gibi, kabarcık grafiği de kategori ekseni kullanmaz; hem yatay hem de dikey eksenler değer eksenleridir. Dağılım grafiğinde çizilen x değerlerine ve y değerlerine ek olarak, kabarcık grafiği x değerlerini, y değerlerini ve z (boyut) değerlerini de çizebilir.
+
+```{r, warning=FALSE}
+df <- world
+fig <- df %>%
+    plot_ly(x = ~Social.support, y = ~Logged.GDP.per.capita, size = ~Ladder.score, color = ~Regional.indicator,
+        text = ~Country.name, hoverinfo = "text", type = "scatter", mode = "markers")
+fig
+```
+
+
+## 3D Plot
+
+
+```{r, warning=FALSE}
+plot_ly(Carseats, x = ~Sales, y = ~Advertising, z = ~Population, color = ~ShelveLoc, colors = c('#BF382A', '#0C4B8E', '#C447B4')) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = 'Sales'),
+                     yaxis = list(title = 'Advertising'),
+                     zaxis = list(title = 'Population')))
+```
+
+3D grafikte insanların satış, reklam ve populasyon durumlarının koltukları için raf konumunun kalitesi durumu altında saçılım grafiği yer almaktadır.
+
+
+## World Map
+
+```{r, echo=FALSE, warning=FALSE}
+library(readxl)
+df <- read_excel("C:/Users/Reddi/Desktop/MachineLearning/API_NY.GDP.MKTP.CD_DS2_en_excel_v2_2763979.xls")
+fig <- plot_ly(df, type='choropleth', locations=df$`Country Code`, z=df$`2020`, text=df$`Country Name`, colorscale="Blues")
+fig <- fig %>% layout(
+    title = '2020 Global GDP<br>Source:<a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD">THE WORLD BANK</a>'
+  )
+fig
+```
+
+
+# Normal Dağılım
+
+
+## Normallik Varsayımı
+
+Normal dağılım, Gauss dağılımı olarak da bilinmektedir.
+Standart normal dağılım bir veri setinde ortalamanın 0, varyansın ise 1 olduğunu durumda sağlanmaktadır.
+Elimizdeki verilerin ortalamalarını çizgi grafiği ile gösterecek olursak, grafiğin orta noktasında çizginin yüksek olduğu, sağ ve sol kenarlara doğru yüksekliğin azaldığını görebiliriz.
+Bu yazımızın görseli bir önceki cümleyle açıklanan grafik örneğidir.
+Normal Dağılım Hangi Amaçla Kullanılır?
+Normal dağılım istatistiksel birtakım analizleri yapmadan önce uygulanan ve hangi analizi yapmamıza karar veren yardımcı bir analizdir.
+Örneğin iki farklı (bağımsız) grubun tek ölçüme ait ortalamalarının karşılaştırılması için bağımsız örneklem T testi veya Mann Whitney U testi kullanılabilir.
+Veri setimizdeki veriler normal dağılım gösteriyor ise bağımsız örneklem t testi kullanılır.
+Özellikle uluslararası dergilerde makale yayınlanacak ise yayın kurulları normal dağılım testi yapılıp yapılmadığına dikkat etmektedir.
+Ülkemizde ise yakın zamanlarda bu analizin yapılması istenilmeye başlanmıştır.
+
+
+$$φ_(μ,σ^2 ) (x)=1/(σ√2π) e^{-(x-μ)^2/2σ^2 }$$
+
+## Çarpıklık Ve Basıklık Ölçüleri
+
+
+### Çarpıklık$(α_3)$
+
+
+Bir dağılıma ilişkin ölçme sonuçlarının nasıl dağıldığı hakkında bilgi verir.
+
+-   Momentlere Dayalı Çarpıklık Ölçüsü $$α_3=M_3/S^3 =((∑(x_i-x ̅)^3 )/n)/S^3$$
+
+$α_3=0$ ise veri simteriktir
+
+$α_3>0$ ise veri sağa çarpık
+
+$α_3<0$ ise veri sola çarpık
+
+
+### Basıklık$(α_4)$
+
+
+Basıklık bir sınıftaki değişim miktarının göstergesidir.
+
+-   Momentlere Dayalı Çarpıklık Ölçüsü
+
+$$α_4=M_4/S^4 =((∑(x_i-x ̅)^4 )/n)/S^4 $$
+
+$α_4=3$ ise veri normaldir
+
+$α_4>3$ ise verinormale göre sivridir
+
+$α_4<3$ ise veri normale göre basıktır
+
+
+## Veri Setlerinide ki Değişkenlerin Normalliklerinin İncelenmesi
+
+
+    Veri setindeki değişkenlerin normallik incelemesini yapmak için Shapiro-Wilk test istatistiği kullanılmıştır. Gözlem sayısı 5000’den küçük olan veri setleri için uygundur. Teste ait hipotezler aşağıdaki şekildedir.
+
+
+$H_0$:Değişkenlerin dağılımı normal dağılımdan gelmemektedir.
+
+$H_A$:Değişkenler dağılımı normal dağılımdan gelmektedir.
+
+
+**Carseats Veri seti**
+
+
+| Değişkenler             | İstatistik | P değeri |
+|-------------------------|----------------|---------------|
+| Sales          | 0.995          | 0.25        |
+| CompPrice   | 0.998          | 0.97        |
+| Income               | 0.961          | 0.00         |
+| Advertising        | 0.873          | 0.00         |
+| Population                | 0.952         | 0.00         |
+| Price | -0,703         | 0.995       |0.39|
+| Age                  | 0.956        | 0.00        |
+| Education                 | 0.924          | 0.00        |
+
+
+**Normallik incelemesi %95 güven düzeyi ile yapılmıştır.** Shapiro-Wilk testi yapıldıktan sonra Income, Advertising, Population, Age  ve Education değişkenlerinin p değerleri 0,05'ten küçük olduğu için $H_0$ hipotezi reddedilir.
+Yani %95 güven ile değişkenlerin dağılımım normal dağılımdan gelmemektedir.
+
+
+**World Veri Seti**
+
+
+| Değişkenler             | İstatistik | P değeri |
+|-------------------------|----------------|---------------|
+| Ladder.score          | 0.991          | 0.48        |
+| upperwhisker   | 0.991          | 0.51        |
+| lowerwhisker               | 0.991          | 0.46         |
+| Logged.GDP.per.capita         | 0.965          | 0.00         |
+| Social.support                | 0.924      | 0.00         |
+| Healthy.life.expectancy | 0.955         | 0.00        |
+| Freedom.to.make.life.choices                  | 0.954       | 0.00        |
+| Generosity           | 0.943         | 0.00       |
+| Perceptions.of.corruption           | 0.94         | 0.00        |
+| Dystopia                 | 0.976          | 0.00        |
+
+
+**Normallik incelemesi %95 güven düzeyi ile yapılmıştır.** Shapiro-Wilk testi yapıldıktan sonra Logged.GDP.per.capita, Social.support, Healthy.life.expectancy, Freedom.to.make.life.choices, Generosity, Perceptions.of.corruption ve Dystopia değişkenlerinin p değerleri 0,05'ten küçük olduğu için $H_0$ hipotezi reddedilir.
+Yani %95 güven ile değişkenlerin dağılımım normal dağılımdan gelmemektedir.
+
+
+## Veri Setlerinide ki Değişkenlerin Çarpıllık ve Basıklıkların İncelenmesi
+
+
+**Carseats Veri seti**
+
+| Değişkenler             | Çarpıklık(α_3) | Basıklık(α_4) |
+|-------------------------|----------------|---------------|
+| Sales          | 0.18          | 2.90       |
+| CompPrice   | -0.04          | 3.02        |
+| Income               | 0.04          | 1.91        |
+| Advertising        | 0.63          |2.44         |
+| Population                | -0.05         | 1.79         |
+| Price | -0,70         | -0.12       |3.43|
+| Age                  | -0.07        | 1.86        |
+| Education                 | 0.04          | 1.70        |
+
+Carseat veri setindeki Income, Popilation, Price, Age ve education değişkenleri basıktır. Değişkenlerin çarpıklıklar çok azdır.
+
+
+**World Veri Seti**
+
+| Değişkenler             | Çarpıklık(α_3) | Basıklık(α_4) |
+|-------------------------|----------------|---------------|
+| Ladder.score          | -0.10          | 2.60       |
+| upperwhisker   | -0.11          | 2.63       |
+| lowerwhisker               | -0.09          | 2.58         |
+| Logged.GDP.per.capita         |-0.34          | 2.17          |
+| Social.support                | -0.92        | 3.34        |
+| Healthy.life.expectancy | -0.51         | 2.41        |
+| Freedom.to.make.life.choices                  |-0.74       | 3.35         |
+| Generosity           | 0.99         | 4.54     |
+| Perceptions.of.corruption           | -1.56         | 5.13       |
+| Dystopia                 | -0.55          | 3.39        |
+
+Perceptions.of.corruption, Freedom.to.make.life.choices değişkeni sola çarpıktır.
+
+Perceptions.of.corruption, Generosity değişkeni sivri bir dağılıma sahiptir.
+
+
+# Makine Öğrenmesi
+
+
+## Makine Öğrenmesi Nedir?
+
+
+Makine öğrenmesi esas olarak 1959 yılında bilgisayar biliminin yapay zekada sayısal öğrenme ve model tanıma çalışmalarından geliştirilmiş bir alt dalıdır. Makine öğrenmesi yapısal işlev olarak öğrenebilen ve veriler üzerinden tahmin yapabilen algoritmaların çalışma ve inşalarını araştıran bir sistemdir. Bu tür algoritmalar statik program talimatlarını harfiyen takip etmek yerine örnek girişlerden veri tabanlı tahminleri ve kararları gerçekleştirebilmek amacıyla bir model inşa ederek çalışırlar. Makine öğrenmesi algoritmaları genel olarak denetimli ve denetimsiz öğrenme olarak iki gruba ayrılır. 
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/ML.png)
+
+
+## Denetimsiz Öğrenme
+
+
+Denetimsiz öğrenmede veri noktaları etiketlenmez. Algoritma, verileri düzenleyerek veya bunların yapısını açıklayarak veri noktalarını sizin için etiketler. Bu teknik, sonucun nasıl görüneceğini bilmediğiniz durumlarda faydalıdır.
+
+Örneğin, müşteri verilerini sağlayıp benzer ürünlerden hoşlanan müşterilerin segmentlerini oluşturmak istediğinizi varsayalım. Sağladığınız veriler etiketlenmez ve sonuçtaki etiketler, veri noktalarında keşfedilen benzerlikler temel alınarak oluşturulur.
+
+
+
+## Denetimli Öğrenme
+
+
+Denetimli öğrenmede, algoritmalar sağladığınız etiketli örnekleri temel alarak tahmin yapar. Bu teknik, sonucun nasıl görüneceğini bildiğiniz durumlarda faydalıdır.
+
+Örneğin, son 100 yıla göre şehirlerin nüfuslarını içeren bir küme sağlayıp dört yıl sonra belirli bir şehrin nüfusunun ne olacağını öğrenmek istediğinizi varsayalım. Sonuç, veri kümelerinde mevcut olan etiketleri kullanır: nüfus, şehir ve yıl.
+
+
+# Verisetlerinin Parçalanması
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/test-train.png)
+
+Kullanacağımız modellerin tahmin performansını ölçmek için veriyi train ve test olarak ikiye bölmemiz gerekiyor. Bir verinin hepsini modellere sokmaya çalışırsak hem sağlıklı sonuçlar alamayacağız, hem de kodların çalışması için çok uzun süre beklememiz gerekecek. Bu sebeple %80’i train, %20’i test olacak şekilde rastgele ayırdık.
+
+## Carseats Verisi
+
+
+```{r ,message=FALSE}
+library(tree)
+
+
+
+set.seed(5364)
+train_indeks <- createDataPartition(Carseats$Urban, 
+                                  p = .8, 
+                                  list = FALSE, 
+                                  times = 1)
+
+
+train <- Carseats[train_indeks,]
+test  <- Carseats[-train_indeks,]
+
+
+train_x <- train %>% dplyr::select(-Urban)
+train_y <- train$Urban
+test_x <- test %>% dplyr::select(-Urban)
+test_y <- test$Urban
+
+
+#tek bir veri seti
+
+training <- data.frame(train_x, Urban = train_y)
+```
+
+
+# Makine Öğrenmesi Regresyon Modelleri
+
+
+## Çoklu Doğrusal Regresyon
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/regression.jpg)
+
+k sayıda değişkenin ilişkileri ölçmek için kullanılır.
+
+Hem tanımlayıcı hem de çıkarımsal istatistik sağlar.
+
+Basit doğrusal regresyon bize normal dağılmış, hakkında aralıklı/oranlı ölçekle veri toplanmış iki değişken arasında doğrusal ilişki olup olmadığını test etme olanağı verir.
+
+Değişkenlerden biri tahmin, biri sonuç değişkenidir.
+
+k sayıda bağımsız değişkenin olduğu doğrusal regresyon modeli aşağıdaki gibi yazılır.
+
+$$y= β_0+β_1 X_1+β_2 X_2+⋯+β_k X_k+ε$$
+
+
+### Model 
+
+
+```{r}
+set.seed(4123)
+lm_fit <- lm(Sales ~ CompPrice+ Income+Advertising+Price+ShelveLoc+Age, data = training)
+#model ciktisi.
+lm_fit
+
+```
+
+Regresyon modeline ilişkin katsayıların sonuçlar incelendiğinde β parametrelerinin tahmini B sütunundadır.
+Bu değerler ile regresyon modeli aşağıdaki gibi olur.
+
+$$Maaş = 5,59+0,092*CompPrice+0,014*Income+0,117*Advertising-0,093*Price$$
+
+$$ 4,801*ShelveLoc_{Good}+ 1,936*ShelveLoc_{Medium}- 0,048*Age $$
+
+
+### Varsayım Kontrolü
+
+```{r}
+summary(lm_fit)
+```
+
+**Kısmi F Testi**
+
+$H_0$: Bağımsız değişkenlerin kurulan modele anlamlı bir katkısı yoktur.
+
+$H_A$: Bağımsız değişkenlerin kurulan modele anlamlı bir katkısı vardır.
+
+Anova tablosundaki F istatistiğinin p değeri 0,05'ten küçük olduğu için $H_0$ hipotezi reddedilir.
+
+Yani %95 güven ile kurulan model anlamlıdır. Popuplation, Education, US ve Urban değişkenleri anlamsız olduğu için çalışmadan çıkarılmıştır.
+
+
+**Artık İncelemesi (Hataların Normal Dağılması)**
+
+```{r}
+yhat<-lm_fit$fit
+t<- rstudent(lm_fit)
+
+```
+
+
+```{r}
+t<-data.frame(t)
+
+p <- ggplot(data=t, aes(sample=t)) +
+  geom_qq(color="red")
+
+ggplotly(p)
+```
+
+Q-Q çizmlerinde ise artıkların normal dağılımı yakın olduğu görülmektedir.
+
+
+**Artık İncelemesi (Sabit Varyanslılık)**
+
+```{r, message=FALSE}
+
+plot_ly( x = yhat, y = t)
+```
+
+Grafikte artıkların doğrusal olmayan herhangi bir kalıpta olmadığını gösterir. Artıkların saçılım grafiği incelendiğinde çizilen doğrunun düz çizgiye yakın olduğu görülür. Değişen varyanslılık yoktur.
+
+
+** Otokorelasyon (İlişkili Hatalar)**
+
+```{r}
+library(lmtest)
+dwtest(lm_fit)
+```
+
+$$H_0:P=0 (Ototkorelasyan yoktur.)$$
+
+$$H_A:P≠0 (Otokorelasyon vardır.) $$
+
+Buna göre Durbin-Watson test istatistiğinin hesaplanan değeri d = 2,0467 olarak elde edilmiştir.
+d=2,0467 değeri 2'yi geçtiği için otokorelasyon vardır denilebilir.
+
+** VIF (Varyans Şişirme Oranı)
+
+```{r, warning=FALSE, message=FALSE}
+library(car)
+print(vif(lm_fit))
+```
+
+$VIF_j$ değerlerini karşılaştırmak için 5 değeri baz alınmıştır.
+
+Değişkenlerin VIF değerleri 5'ten küçük olduğu için değişkenler arasında çoklu bağıntının olduğu değişken yoktur.
+
+
+### Tahmin
+
+Kurulan model ile tahmin yapılacak ve yapılan tahminlerin basarisi test seti kullanılarak değerlendirilecek.
+
+
+Model ile Tahmin
+
+```{r}
+defaultSummary(data.frame(obs = training$Sales,
+pred = lm_fit$fitted.values)
+)
+```
+
+**Belirtme Katsayısı($R^2$):** Yukarıdaki görüldüğü sales verilerinin çoklu regresyon modeli için belirtme katsayısı ($R^2$) 0,8780 olarak elde edilmiştir. Bağımlı değişkendeki değişimin %87,80'ni train verisindeki bağımsız değişken tarafından açıklanmıştır.
+Modele ait düzeltilmiş $R^2$ ise %87,12'dır.
+
+**Artıkların mutlak ortalaması(MAE):** hatası 0,79 dur. Değerin düşük olması modelin iyi kurulduğunun gösterir.
+
+**Hata Kareler Ortalamasının Kökü (RMSE):** Modelinin, tahminleyicinin tahmin ettiği değerler ile gerçek değerleri arasındaki uzaklığın bulunmasında kullanılır. Değerin 0,99 olması tahmin edicilerin gerçek derelerine yakın olmasıdır. ,
+
+RMSE ve MAE değerlerinin düşük olması oluşturulan modelin ne kadar iyi olduğunu gösterir.
+
+
+### Model Geliştirme
+
+```{r}
+
+ctrl <- trainControl(method = "cv", 
+                     number = 10)
+
+lm_val_fit <- train(x = training[-c(1)], y = training$Sales,
+      method = "lm",
+      trControl = ctrl)
+
+
+lm_val_fit$results
+
+summary(lm_val_fit)
+lm_val_fit$finalModel
+
+```
+
+
+# Makine Öğrenmesi Sınıflandırma Modelleri
+
+```{r}
+df <- Carseats
+
+
+df$Sales <- as.factor(ifelse(df$Sales <= 8, "Low", "High"))
+
+
+set.seed(5364)
+train_indeks <- createDataPartition(df$Sales, 
+                                  p = .8, 
+                                  list = FALSE, 
+                                  times = 1)
+
+
+train <- df[train_indeks,]
+test  <- df[-train_indeks,]
+
+
+train_x <- train %>% dplyr::select(-Sales)
+train_y <- train$Sales
+test_x <- test %>% dplyr::select(-Sales)
+test_y <- test$Sales
+
+
+#tek bir veri seti
+
+training <- data.frame(train_x, Sales = train_y)
+```
+
+```{r, echo=FALSE}
+draw_confusion_matrix <- function(cm) {
+  
+  total <- sum(cm$table)
+  res <- as.numeric(cm$table)
+  
+  # Generate color gradients. Palettes come from RColorBrewer.
+  greenPalette <- c("#F7FCF5","#E5F5E0","#C7E9C0","#A1D99B","#74C476","#41AB5D","#238B45","#006D2C","#00441B")
+  redPalette <- c("#FFF5F0","#FEE0D2","#FCBBA1","#FC9272","#FB6A4A","#EF3B2C","#CB181D","#A50F15","#67000D")
+  getColor <- function (greenOrRed = "green", amount = 0) {
+    if (amount == 0)
+      return("#FFFFFF")
+    palette <- greenPalette
+    if (greenOrRed == "red")
+      palette <- redPalette
+    colorRampPalette(palette)(100)[10 + ceiling(90 * amount / total)]
+  }
+  
+  # set the basic layout
+  layout(matrix(c(1,1,2)))
+  par(mar=c(2,2,2,2))
+  plot(c(100, 345), c(300, 450), type = "n", xlab="", ylab="", xaxt='n', yaxt='n')
+  title('CONFUSION MATRIX', cex.main=2)
+  
+  # create the matrix 
+  classes = colnames(cm$table)
+  rect(150, 430, 240, 370, col=getColor("green", res[1]))
+  text(195, 435, classes[1], cex=1.2)
+  rect(250, 430, 340, 370, col=getColor("red", res[3]))
+  text(295, 435, classes[2], cex=1.2)
+  text(125, 370, 'Predicted', cex=1.3, srt=90, font=2)
+  text(245, 450, 'Actual', cex=1.3, font=2)
+  rect(150, 305, 240, 365, col=getColor("red", res[2]))
+  rect(250, 305, 340, 365, col=getColor("green", res[4]))
+  text(140, 400, classes[1], cex=1.2, srt=90)
+  text(140, 335, classes[2], cex=1.2, srt=90)
+  
+  # add in the cm results
+  text(195, 400, res[1], cex=1.6, font=2, col='white')
+  text(195, 335, res[2], cex=1.6, font=2, col='white')
+  text(295, 400, res[3], cex=1.6, font=2, col='white')
+  text(295, 335, res[4], cex=1.6, font=2, col='white')
+  
+  # add in the specifics 
+  plot(c(100, 0), c(100, 0), type = "n", xlab="", ylab="", main = "DETAILS", xaxt='n', yaxt='n')
+  text(10, 85, names(cm$byClass[1]), cex=1.2, font=2)
+  text(10, 70, round(as.numeric(cm$byClass[1]), 3), cex=1.2)
+  text(30, 85, names(cm$byClass[2]), cex=1.2, font=2)
+  text(30, 70, round(as.numeric(cm$byClass[2]), 3), cex=1.2)
+  text(50, 85, names(cm$byClass[5]), cex=1.2, font=2)
+  text(50, 70, round(as.numeric(cm$byClass[5]), 3), cex=1.2)
+  text(70, 85, names(cm$byClass[6]), cex=1.2, font=2)
+  text(70, 70, round(as.numeric(cm$byClass[6]), 3), cex=1.2)
+  text(90, 85, names(cm$byClass[7]), cex=1.2, font=2)
+  text(90, 70, round(as.numeric(cm$byClass[7]), 3), cex=1.2)
+  
+  # add in the accuracy information 
+  text(30, 35, names(cm$overall[1]), cex=1.5, font=2)
+  text(30, 20, round(as.numeric(cm$overall[1]), 3), cex=1.4)
+  text(70, 35, names(cm$overall[2]), cex=1.5, font=2)
+  text(70, 20, round(as.numeric(cm$overall[2]), 3), cex=1.4)
+}
+
+```
+
+** Veri setinde sınıflandırma yapmak için Sales değişkeni kategorize edilmiştir**
+
+
+
+## Lojistik Regresyon
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/lojistic.jpg)
+
+Lojistik regresyon, bir sonucu belirleyen bir veya daha fazla bağımsız değişken bulunan bir veri kümesini analiz etmek için kullanılan istatistiksel bir yöntemdir. Sonuç, ikili bir değişkenle ölçülür (yalnızca iki olası sonuç vardır).
+Lojistik regresyonda, bağımlı değişken ikili veya ikili, yani yalnızca 1 (DOĞRU, başarı, hamile vb.) Veya 0 (YANLIŞ, hata, gebe olmayan vb.) Olarak kodlanmış verileri içeriyor.
+
+Lojistik regresyonun amacı,  iki yönlü karakteristiği (bağımlı değişken = yanıt veya sonuç değişkeni) ile ilgili bir dizi bağımsız (öngörücü veya açıklayıcı) değişken arasındaki ilişkiyi tanımlamak için en uygun (henüz biyolojik olarak makul) modeli bulmaktır. Lojistik regresyon, ilgi karakteristiklerinin varlığının olasılığını logit dönüşümünü tahmin etmek için bir formülün katsayılarını (ve standart hatalarını ve önem seviyelerini) üretir:
+
+$$logit(p) = b_0+b_1X_1+b_2X_2+...+b_kX_k$$
+
+Burada p, karakteristik özelliğinin var olma olasılığıdır.
+
+$$odds=p/{1-p} ~~ ve ~~logit(p)=ln(p/{1-p})   $$
+
+Karekök hataların toplamını en aza indirgeyen parametreleri seçmek yerine (sıradan regresyon gibi), lojistik regresyonda tahmin, örnek değerlerin gözlem olasılığını en yükseğe çıkaran parametreleri seçer.
+
+
+
+
+
+
+### Model 
+
+```{r}
+set.seed(86451)
+model_glm <- glm(Sales~ ., 
+                 data = train, 
+                 family = "binomial")
+
+levels(training$Sales)[2]
+
+summary(model_glm)
+```
+
+```{r, message=FALSE}
+library(ResourceSelection)
+hoslem.test(model_glm$y,fitted(model_glm))
+```
+
+$H_0$: Oluşturulan model veri ile uyumludur.
+
+$H_A$: Oluşturulan model veri ile uyumlu değildir.
+
+Sig. değeri 0,05’den büyük olduğu için $H_0$ reddedilmez.
+
+%95 Güven ile oluşturulan model veri ile uyumludur.
+
+
+### Tahminlerin Görselleştirilmesi
+
+```{r}
+
+plot(as.numeric(train$Sales)-1 ~ Price , data = train,
+     col = "darkorange",
+     pch = "I", 
+     ylim = c(-0.2, 1))
+
+abline(h = 0, lty = 3)
+abline(h = 1, lty = 3)
+abline(h = 0.5, lty = 2)
+
+model_glm <- glm(Sales~ Price , 
+                 data = train, 
+                 family = "binomial")
+
+curve(predict(model_glm, data.frame(Price  = x), type ="response"),
+              add = TRUE,
+              lwd = 3,
+              col = "dodgerblue")
+
+
+
+
+
+
+
+
+```
+
+### ROC Eğrisi
+
+```{r, warning=FALSE}
+model_glm <- glm(Sales~ ., 
+                 data = test, 
+                 family = "binomial")
+
+
+test_ol <- predict(model_glm, newdata = test[-c(1)], type = "response")
+
+a <- roc(test$Sales ~ test_ol, plot = TRUE, print.auc = TRUE)
+```
+
+
+### Varsayım Kontrolü
+
+**Cook’s Uzaklığı**
+
+```{r}
+plot(model_glm,which=4,id.n=3)
+```
+
+Burada cook’s distance değerlerini görüyoruz. Ancak bu gözlemlere bakarak aykırı değerler olduğu konusunda kesin yorum yapılamamaktadır. Bunun için standartlaştırılmış artık değerlerine bakılır. Standartlaştırılmış artıklar 3 ile -3 arasında değerler aldığında etkin gözlem yoktur.
+
+
+**Standartlaştırılmış Artık**
+
+```{r}
+std.resid<-rstandard(model_glm)
+z<-abs(std.resid)>3
+table(z)["TRUE"]
+```
+Çıktıyı yorumladığımızda etkin gözlem olmadığını söyleyebiliriz.  
+
+
+
+**VIF (Şişirme Oranı)**
+
+```{r}
+car::vif(model_glm)
+```
+
+VIF değerlerinin 10'dan olduğunu görüyoruz. Değişkenler arasında çoklu doğrusal bağlantı problemi bulunmamaktadır.
+
+
+
+
+### Tahmin
+```{r}
+
+ol <- predict(model_glm, type = "response")
+hist(ol)
+
+model_glm_pred <- ifelse(predict(model_glm, type = "response") > 0.5, "Low","High")
+table(model_glm_pred)
+
+```
+
+
+**Siniflandirma Hatasi Tespiti ve Karmasiklik Matrisi**
+
+```{r, echo=FALSE}
+# construct the evaluation dataset
+set.seed(144)
+true_class <- test$Sales
+true_class <- sort(true_class)
+test_set <- data.frame(obs = true_class,ol <- predict(model_glm, type = "response"))
+test_set$pred <- factor(ifelse(test_set$ol >= 0.5, "Low", "High"))
+```
+
+```{r, echo=FALSE}
+# calculate the confusion matrix
+cm <- confusionMatrix(data = test_set$pred, reference = test_set$obs)
+draw_confusion_matrix(cm)
+```
+
+Test verisinde ki atama başarı durumu %48,1'dir
+
+
+## SVM (Destek Vektör Makineleri / Support Vector Machine)
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/svm.jpg)
+
+“Destek Vektör Makinesi” (SVM), sınıflandırma veya regresyon problemleri için kullanılabilen denetimli bir makine öğrenmesi algoritmasıdır. Bununla birlikte, çoğunlukla sınıflandırma problemlerinde kullanılır. Bu algoritmada, her bir veri maddesini belirli bir koordinatın değeri olan her özelliğin değeri ile birlikte n-boyutlu boşluğa (burada n sahip olduğunuz özelliklerin sayısı) bir nokta olarak çizilir. Ardından, iki sınıftan oldukça iyi ayrım yapan hiper-düzlemi bularak sınıflandırma gerçekleştirilir. Destek Vektörleri, sadece gözlemin koordinatlarıdır. Destek Vektör Makinesi, iki sınıftan (hiper düzlem / çizgi) en iyi ayıran bir sınırdır.
+
+1-) Destek Vektör Makineleri (SVM), düzlem üzerindeki noktaların bir doğru veya hiper düzlem ile ayrıştırılması ve sınıflandırılmasıdır.
+
+2-) Küçük veya orta büyüklükteki veri setleri için uygundur. Scale’e duyarlıdır. Scale edilmesi gerekir.
+
+3-) Hard Margin ve Soft Margin arasındaki dengeyi C ile kontrol edebiliriz. C büyüdükçe Margin daralır.
+
+4-) Model overfit olursa C’nin azlatılması gerekir.
+
+5-) 2 boyutta açıklanamayan değişimleri boyut arttırarak çözüyormuş gibi yapılan hilelere Kernel Trick denir.
+
+6-) 2 boyutta açıklayamadığımız veri setimizi daha fazla boyutta açıklamak için kullanılan Kernel Trick metoduna Polynomial Kernel denir.
+
+7-) Model overfit olursa derecesi düşürülür, underfit olursa derece yükseltilir. Coef0 hiperparametresi ile yüksek dereceli denklemlerden ne kadar etkileneceğini ayarlayabilirsiniz.
+
+8-) Her bir noktanın belirli bir noktaya ne kadar benzediğini normal dağılım ile hesaplayan, ona göre sınıflandıran Kernel Trick metoduna RBF Kernel denir.
+
+9-) Dağılım genişliğini kontrol ettiğimiz gamma değeri ne kadar küçükse dağılım o kadar geniş olur. Model overfit olmuşsa gamma değerini düşürmemiz, model underfit olmuşsa gamma değerini yükseltmemiz gerekir.
+
+
+
+### Model
+
+```{r, warning=FALSE}
+set.seed(8645)
+svm_fit <- svm(formula = Sales ~., data = train, scale = FALSE, type = "C-classification",
+    kernel = "linear")
+```
+
+### Tahmin
+
+```{r}
+summary(svm_fit)
+```
+Modeli özetlediğimizde kullanılan destek vektör sayısı ve bağımlı değişkeni görebiliyoruz.
+
+### Model Geliştirme
+
+```{r, echo=FALSE}
+# construct the evaluation dataset
+y_pred = predict(svm_fit, newdata = test[-1])
+set.seed(144)
+true_class <- train$Sales
+true_class <- sort(true_class)
+test_set <- data.frame(obs = test_y)
+test_set$pred <- factor(y_pred)
+```
+
+```{r, echo=FALSE}
+# calculate the confusion matrix
+cm <- confusionMatrix(data = test_set$pred, reference = test_set$obs)
+draw_confusion_matrix(cm)
+```
+
+Train seti üzerinde kurduğumuz modelin, test seti üzerindeki tahminlerini görüyoruz. 
+
+Yapılan tahminlerin doğruluk oranı %89,9 olarak hesaplanmıştır.
+
+
+## CART ( Karar Ağaçları / Decision Tree )
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/cart.jpg)
+
+Karar ağacı, risklerin, kazançların ve hedeflerin anlaşılmasına yardımcı olan bir teknik türüdür. Aynı zamanda birçok önemli yatırım sahalarında uygulanabilen, birbiriyle bağlantılı şans olaylarıyla ilgili olarak çıkan çeşitli karar noktalarını incelemek için kullanılan bir karar destek aracıdır[1]. Yalnızca koşullu kontrol ifadeleri içeren bir algoritmayı görüntülemenin bir yoludur.
+
+Karar ağacı, bir hedefe ulaşma olasılığı en yüksek olan stratejiyi belirlemeye yardımcı olmak için kullanılan bir yöntemdir. Özellikle karar analizinde olmak üzere karmaşık sorunların araştırmasında yaygın olarak kullanılmaktadır.
+
+
+**Karar ağacının avantajları:**
+
+*Anlaması ve yorumlaması basit. İnsanlar kısa bir açıklamadan sonra karar ağacı modellerini anlayabilecektir.
+
+*Bir durumu (alternatifleri, olasılıkları ve maliyetleri) ve sonuç tercihlerini tanımlayan uzmanlara dayalı olarak önemli ön görüler oluşturulabilmektedir.
+
+*Farklı senaryolar için en kötü, en iyi ve beklenen değerlerin belirlenmesine yardımcı olmaktadır.
+
+*Diğer karar teknikleriyle birleştirilebilmektedir.
+
+
+**Karar ağacının dezavantajları:**
+
+*Kararsızdırlar, yani verilerdeki küçük bir değişikliğin, en iyi durumdaki karar ağacının yapısında büyük bir değişikliğe yol açabileceği anlamına gelmektedir.
+
+*Genellikle hatalıdırlar. Diğer birçok tahmin algoritmaları benzer verilerle daha iyi performans gösterir. Bu, tek bir karar ağacını rastgele orman ile değiştirerek düzeltilebilir, ancak rastgele ormanın tek bir karar ağacı kadar yorumlanması kolay değildir.
+
+*Farklı sayıda seviyeye sahip kategorik değişkenler içeren veriler için, karar ağaçlarındaki bilgi kazanımı, daha fazla seviyeye sahip öznitelikler lehine önyargılıdır.
+
+*Hesaplamalar çok karmaşık hale gelebilir, özellikle de birçok değer belirsizse veya birçok sonuç ile bağlantılıysa.
+
+
+### Model
+
+```{r, warning=FALSE, message=FALSE}
+set.seed(65396)
+seat_tree <- tree(Sales~., data = train)
+summary(seat_tree)$used
+```
+
+```{r}
+seat_rpart <- rpart(Sales ~ ., data = train, method = "class")
+
+
+plotcp(seat_rpart)
+
+min_cp <- seat_rpart$cptable[which.min(seat_rpart$cptable[,"xerror"]), "CP"]
+
+seat_rpart_prune <- prune(seat_rpart, cp = min_cp)
+
+prp(seat_rpart_prune, type = 1)
+rpart.plot(seat_rpart_prune)
+```
+
+
+```{r}
+plot(seat_tree)
+text(seat_tree, pretty = 0)
+```
+
+### Model Tahmini
+```{r, warning=FALSE}
+tb <- table(predict(seat_tree, train_x, type = "class"), train_y)
+
+confusionMatrix(tb, positive = "High")
+```
+
+
+### Model Geliştirme
+
+CV ile budama yaparak model geliştirme işlemleri:
+
+Overfit durumlarını çözmek için karar ağaçlarında budama yapmak sık sık gerekebilir. Karar ağacının isabetli sınıflama oranına yeterince katkı yapmayan dallarda yer alan tahmin edici değişkenlerin modelden çıkarılması işlemidir. Budama iki türlü yapılabilir. Daha herhangi bir ayrım yapmadan tahmin edici değişkenleri teker teker ele alarak modelin tahmin gücü açısından hangisinin daha iyi olduğu irdelenerek adım adım dallanmalar ilerletilebilir. Buna Preprunning denir. Diğer bir yol ise tamamlanmış bir karar ağacının modele katkı yapmayan dallarını tespit ederek modelden çıkarma işlemdir. Buna da Postprunning denir.
+
+```{r, warning=FALSE ,message=FALSE}
+seat_tree <- tree(Sales ~ . , data = train)
+
+set.seed(12312153)
+seat_tree_cv <- cv.tree(seat_tree, FUN = prune.misclass, K = 10)
+min_tree <- which.min(seat_tree_cv$dev)
+
+```
+
+**Gorsel Incelenmesi**
+
+```{r}
+par(mfrow = c(1,2))
+plot(seat_tree_cv)
+plot(seat_tree_cv$size, 
+     seat_tree_cv$dev / nrow(train), 
+     type = "b",
+     xlab = "Agac Boyutu/Dugum Sayisi", ylab = "CV Yanlis Siniflandirma Orani")
+
+```
+
+
+
+**Bu Sonuclara Gore Agacin Budanmasi**
+
+
+```{r}
+
+seat_tree_prune <- prune.tree(seat_tree, best = 5)
+summary(seat_tree_prune)
+
+plot(seat_tree_prune)
+text(seat_tree_prune, pretty = 0)
+
+```
+
+
+**Sonuclarin Karsilastirilmasi**
+
+```{r, echo=FALSE}
+# construct the evaluation dataset
+set.seed(144)
+test_set <- data.frame(obs = test_y)
+test_set$pred <- predict(seat_tree_prune, test_x, type = "class")
+```
+
+```{r, echo=FALSE}
+# calculate the confusion matrix
+cm <- confusionMatrix(data = test_set$pred, reference = test_set$obs)
+draw_confusion_matrix(cm)
+```
+Doğru Atmama Oranı %72,2 olarak hesaplanmıştır.
+
+## RF (Rastgele Orman / Random Forest)
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/rf.webp)
+
+RF, karar ağaçlarına dayanır. Makine öğreniminde karar ağaçları, tahmin modelleri oluşturan denetimli öğrenme tekniğidir. Bunlara karar ağaçları (decision trees) adı verilmektedir. Bu yöntemin özellikle mühendislik bilimlerinde başta sağlık sektörü olmak üzere pek çok sektörde yaygın bir şekilde kullanıldığı görülmektedir.
+
+
+Rastgele orman algoritmaları hem sınıflandırma (classification) hem de regresyon (regression) problemlerinin çözümünde kullanılan makine öğrenmenin denetimli öğrenme (supervised) kısmında yer alan tahmin oranı yüksek algoritmalardır. Burada aslında sınıflandırma ve regresyondan kasıt tahmin edilecek bağımlı veya hedef değişkenin veri tipi ifade edilmektedir. Sınıflandırma ve regresyon için kullanılan veri tipleri Şekil 2’de sunulmuştur. Cevap değişkeni ya da bağımlı değişken kategorik ise rastgele orman algoritmasında sınıflandırma, bağımlı değişken nicel ise rastgele orman algoritmasında regresyon problemini çözmüş oluyoruz. RF analizlerde uç değerler (outliers)’e duyarlı değildir.
+
+**Rastgele Orman algoritmasının avantajları. **
+
+1- Sınıflandırma problemlerindeki uygulamalar için Rastgele Orman algoritması Aşırı uyum problemini önlemektedir.
+
+2- Rastgele Orman algoritmasının hem sınıflandırma hem de regresyon problemlerinde kullanılabilir.
+
+3- Rastgele Orman algoritması, eğitim veri setindeki mevcut özellikler arasından en önemli özelliği tanımlamak için kullanılabilir.
+
+
+### Model
+```{r}
+set.seed(456)
+rf_fit <- randomForest(train_x, train_y, importance = TRUE)
+rf_fit
+
+```
+
+Kurulan rastgele orman modelinde konfisyon matrisi ve bu matrisin hatalı atama oranları gözükmektedir.
+
+
+```{r}
+
+varImpPlot(rf_fit, main = "Carseats Verisi Sales Değerleri İçin Random Forest Modeli")
+```
+
+Tekrardan değişkenlerin önemlilik derecelerine bakıyoruz. ShelveLoc(Araba Koltukları Raf Kalitesini) değişkeni yeniden en önemli değişken olarak gözüksede gini grafiğinde Price(Kalite) değişkeni en önemlisi olarak gözüküyor.
+
+
+### Tahmin
+```{r}
+confusionMatrix(predict(rf_fit, test_x), test_y, positive = "High")
+
+```
+
+Carseats veri seti ile kurduğumuz modelin test seti üzerindeki tahminlerini ve doğruluk değerlerini konfüzyon matrisinde görülmektedir. Çalışmadaki doğru atama yüzdesi %86,08 olarak hesaplanmıştır.
+
+
+### Model Geliştirme
+
+
+```{r}
+#RANDOM SEARCH
+control <- trainControl(method='repeatedcv', 
+                        number = 10,
+                        search = 'random')
+
+#tunelenght ile 15 tane mtry degeri rastgele uretilecek 
+set.seed(1)
+rf_random <- train(Sales ~ .,
+                   data = train,
+                   method = 'rf',
+                   metric = 'Accuracy',
+                   tuneLength  = 15, 
+                   trControl = control)
+
+plot(rf_random)
+
+
+#GRID SEARCH
+control <- trainControl(method='cv', 
+                        number=10, 
+                        search='grid')
+ 
+tunegrid <- expand.grid(mtry = (1:10)) 
+
+rf_gridsearch <- train(Sales ~ ., 
+                       data = train,
+                       method = 'rf',
+                       metric = 'Accuracy',
+                       tuneGrid = tunegrid)
+
+plot(rf_gridsearch)
+confusionMatrix(predict(rf_gridsearch, test_x), test_y, positive = "High")
+
+
+```
+
+Test verisi üzerinde denenen modelin doğru atama yüzdesi de %86,08 olarak hesaplanmıştır.
+
+
+```{r, echo=FALSE}
+# construct the evaluation dataset
+set.seed(144)
+test_set <- data.frame(obs = test_y)
+test_set$pred <- factor(predict(rf_gridsearch, test_x))
+```
+
+```{r, echo=FALSE}
+# calculate the confusion matrix
+cm <- confusionMatrix(data = test_set$pred, reference = test_set$obs)
+draw_confusion_matrix(cm)
+```
+
+Atamaların %77,2 si doğru atanmıştır.
+
+Carseats verisinde ki kategorilendirilmiş satış değişkeninin train verisi ile kurulan 4 sınıflandırma modelini test verisi üzerindeki başarı udumları;
+
+
+Yöntem|Yüzde Başarı|
+------|-----|
+Lojistik Regresyon|%48,1|
+Destek Vektör Matrisi|%89,9|
+Karar Ağacı|%72,2|
+Rastgele Orman|%77,2|
+
+Başarı yüzdelerine bakılacak olursa sales değişkeni için en doğru sınıflandırma yöntemi %89,9 başarı yüzdesi ile Destek Vektör Matrisinin(SVM) kullanılması uygundur.
+
+
+
+
+
+
+
+# Makine Öğrenmesi Denetimsiz Öğrenme
+
+```{r}
+df = world[-c(1,2)]
+df<-scale(df)
+head(df)
+```
+
+World verisindeki scaler değişkenler seçilerek. Bu değişkenler standardize edilmiştir.
+
+## K-Means Kümeleme
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/KMeans.gif)
+
+K-Means Kümeleme Algoritması Data Mining Dünyasında En Çok Kullanılan Algoritmaların başında yer almaktadır. K-Means algoritması bir unsupervised learning (denetimsiz öğrenme) ve kümeleme algoritmasıdır. K-Means’ teki K değeri küme sayısını belirler ve bu değeri parametre olarak alması gerekir. K adet özgün küme oluşturduğu ve her kümenin merkezi, kümedeki değerlerin ortalaması olduğu için K-Ortalamalar denmektedir. Algoritma istatistiksel olarak benzer nitelikteki kayıtları aynı gruba sokar. Bir elemanın yalnızca bir kümeye ait olmasına izin verilir.  Küme merkezi kümeyi temsil eden değerdir. Bu algoritmada ‘K’ parametresi elimizdeki verinin kaç tane kümeye ayrılacağını belirtiyor. Bu parametrenin seçimi için birkaç analiz yöntemi olsa da en iyisi algoritmayı farklı k değerlerinde yürütüp işimize en çok yarayanı almaktır. Çünkü farklı sayıda gruplar, farklı özellikleri yüz üstüne çıkarabilir.
+
+
+```{r}
+set.seed(1135)
+k2 <- kmeans(df, centers = 2, nstart = 25)
+str(k2)
+
+```
+
+İlk olarak kendi belirdiğimiz bir küme sayına göre kümeleme yapmayı denedik.
+
+
+### Kümelerin Görselleştirilmesi
+
+
+Kümelerin Görselleştirilmesi
+
+```{r}
+fviz_cluster(k2, data = df)
+
+
+```
+
+Kümelere ait saçlım grafikleri Yukarıdaki gibidir.
+
+
+Scatter Plot ile Gorsellestirme
+
+```{r}
+
+df %>% as_tibble() %>%
+  mutate(kumeler = k2$cluster) %>%
+  ggplot(aes(Ladder.score, Social.support, color = factor(kumeler)))+ geom_point()
+  
+
+
+```
+
+Social Support ve Ladder Score değişkenlerinin kümelere göre saçlım grafiği yukarıdaki gibidir.
+
+
+### Farkli k Değerlerine Göre Kümelemeler
+
+
+```{r}
+set.seed(326)
+k2 <- kmeans(df, centers = 2, nstart = 25)
+k3 <- kmeans(df , centers = 3, nstart = 25)
+k4 <- kmeans(df , centers = 4, nstart = 25)
+k5 <- kmeans(df , centers = 5, nstart = 25)
+
+p1 <- fviz_cluster(k2, geom = "point", data = df) + ggtitle("k=2")
+p2 <- fviz_cluster(k3, geom = "point", data = df) + ggtitle("k=3")
+p3 <- fviz_cluster(k4, geom = "point", data = df) + ggtitle("k=4")
+p4 <- fviz_cluster(k5, geom = "point", data = df) + ggtitle("k=5")
+library(gridExtra)
+
+grid.arrange(p1, p2, p3, p4, nrow = 2)
+
+
+```
+
+k=2,3,4 ve 5 değerleri için kümelerin nasıl ayrıldığını görüyoruz. Optimum k değerlerini bulmak için kullanılan bazı yöntemler vardır. Bu yöntemlere bakacak olursak.
+
+
+### Optimum Küme Sayısının Belirlenmesi
+
+
+Optimum küme sayısını belirlemek için üç faklı yöntem kullanılır. Bu yöntemler;
+
+
+#### Elbow Yontemi ile Optimum Küme Sayısı
+
+
+```{r}
+set.seed(123)
+fviz_nbclust(df, kmeans, method = "wss")
+
+```
+
+
+#### Average Silhouette ile Optimum Küme Sayısı
+
+```{r}
+fviz_nbclust(df, kmeans, method = "silhouette")
+```
+
+
+#### Gap Statistic ile Optimum Küme Sayısı
+
+GAP İstatistiğinin Hesaplanması
+
+```{r}
+set.seed(123)
+gap_stat <- clusGap(df, FUN = kmeans, nstart = 25, K.max = 10, B = 50)
+fviz_gap_stat(gap_stat)
+```
+
+
+### Son K-Means'in Çalıştırılması
+
+```{r}
+set.seed(123)
+final <- kmeans(df, 2, nstart = 25)
+print(final)
+
+```
+Örneklemimizi ikiye ayırmış olduk. İlk küme 86, ikinci küme 36 gözlem içeriyor. Kümelerin değişken ortalamalarını, hangi gözlemin hangi kümede olduğunu ve kümelerin kareler toplamını görüyoruz.
+
+
+**Kumelerin Gorsellestirilmesi**
+
+```{r}
+fviz_cluster(final, data = df)
+
+
+```
+
+
+
+**Scatter Plot ile Gorsellestirme**
+
+```{r}
+
+df %>% as_tibble() %>%
+  mutate(kumeler = final$cluster) %>%
+  ggplot(aes(Ladder.score, Social.support, color = factor(kumeler)))+ geom_point()
+  
+```
+
+
+## Hiyerarşik Kümeleme Analizi
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/clustergram.png)
+
+K-Means kümeleme yönteminin bir dezavantajı vardır. Küme sayısını önceden belirlemeniz gerekmektedir. Bu dezavantajı ortadan kaldırmak için hiyerarşik kümeleme geliştirilmiştir. Hiyerarşik kümeleme algoritmasının temel mantığı, benzer özniteliklerin bir araya gelmesine veya tam tersine bölünmesine dayanmaktadır.
+
+
+Hiyerarşik kümeleme analizi de, veriler arasındaki benzerlik ve uzaklık hesaplamaları her adımda güncellenmektedir. Hesaplanan uzaklık/ benzerlik değerlerinden oluşan matris, seçilen **bağlantı yönteminin** kullanılmasına temel teşkil etmektedir.
+
+
+**Sıklıkla kullanılan bağlantı yöntemleri şöyledir:**
+
+
+- **Bağlantı Temelli Teknikler;**
+
+
+- Tek Bağlantı (Single Linkage) / En Yakın Komşu Yöntemi (Nearest Neighbor)
+
+
+- Tam Bağlantı (Complete Linkage) / En Uzak Komşu Yöntemi (Furthest Neighbor)
+
+
+- Ortalama Bağlantı (Average Linkage)
+
+
+- **Varyans Temelli Teknikler;**
+
+
+- Ward Yöntemi (Ward’s Linkage)
+
+
+- **Merkezileştirme Temelli Teknikler;**
+
+
+- Medyan Bağlantı (Median Linkage)
+
+
+- Merkezi Yöntem (Centroid Linkage)
+
+
+
+### Birleştirici Methodların Karşılaştırılması
+
+
+```{r}
+
+m <- c("average", "single","complete", "ward")
+names(m) <- c("average", "single","complete", "ward")
+
+
+ac <- function(x) {
+
+  agnes(df, method = x)$ac 
+  
+}
+
+sapply(m, ac)
+
+
+
+```
+
+### Birleştirici Hiyerarşik Kümeleme
+
+
+```{r}
+d <- dist(df, method = "euclidean")
+hc1 <- hclust(d, method = "ward")
+hc1
+plot(hc1)
+```
+
+```{r, warning=FALSE}
+fviz_dend(hc1, cex = 0.5, k = 2, palette = "jco") 
+plot(hc1, cex = 0.6)
+rect.hclust(hc1, k = 2, border = 2:5)
+```
+
+Yapılan iki dentogramda da bütün gözlemlerin hangi kümede olduğunu gösterilmededir.
+
+
+## Temel Bileşen Analizi (PCA)
+
+![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/pc.png)
+
+Temel Bileşenler Analizi; birbirleri ile ilişkili olan çok sayıda değişkenden meydana gelenbirçokk değişkenli sistemi, bu değişkenlerin doğrusal fonksiyonları şeklinde daha az sayıda ve birbirleri ile ilişkisiz ve aynı zamanda önceki sisteme ait toplam değişimi mümkün olduğunca büyük oranda açıklayabilen yeni değişkenlerden meydana gelen sisteme dönüştüren çok değişkenli istatistiksel analiz tekniğidir. Analiz sonucunda oluşan her bir yeni değişkene temel bileşen denir.
+
+
+Temel Bileşenler Analizi’nde p sayıda başlangıç değişkenine karşılık elde edilen p sayıda temel bileşenin her biri, orijinal değişkenlerin doğrusal bir bileşimidir. Dolayısıyla, her bir temel bileşen bünyesinde tüm değişkenlerden belirli oranda bilgiyi barındırır. Bu özelliği sayesinde Temel Bileşenler Analizi, p boyutlu veri kümesi yerine, ilk m önemli temel bileşenin kullanılması yoluyla boyut indirgemesi sağlayabilmektedir. İlk m temel bileşen toplam varyansın büyük kısmını açıklıyorsa, geriye kalan p-m temel bileşen ihmal edilebilir. Klasik değişken seçimi teknikleri ile karşılaştırıldığında bu yöntem ile bilgi kaybı oldukça aza indirilecektir.
+
+
+### Model
+
+
+```{r}
+df<-world[-c(1,2)]
+
+set.seed(6387)
+fit.pca <- prcomp( ~., data=df, scale=TRUE) # korelasyon matrisi icin scale=TRUE yaz 
+fit.pca$rotation
+```
+
+Değişkenlerin faktör yüklerin yukarıdaki gibidir.
+
+
+```{r}
+as_tibble(fit.pca$x)
+```
+
+Gözlemlerin faktör yükleri yukarıdaki gibidir.
+
+
+### Faktör Yüklerinin Belirlenmesi
+
+
+**Varyans ile**
+
+
+```{r}
+summary(fit.pca)
+```
+
+Kümülatif varyans açıklama oranı %66’lık kısmı geçtiği için 2. değer olan %71,45 alınır.
+
+
+**Grafik ile**
+
+
+```{r}
+scree <- fviz_eig(fit.pca, main = "Faktör Yükleri Grafiği")
+scree
+```
+
+Faktör yükleri grafiğinde de gözüktüğü gibi yüklerdeki en büyük azalış 2 faktör varken oluşmuştur. 
+
+
+
+```{r, message=FALSE,warning=FALSE}
+fit.pca$rotation[,1:2]
+
+```
+
+Değişkenlerin faktörlerde ki yükleri yukarıdaki gibidir. 
+
+
+```{r}
+faktor_yukleri<-t(fit.pca$rotation)*fit.pca$sdev # koklambda ile carpılmıs $H_A$li bu da bizi faktore goturuyor
+faktor_yukleri
+```
+
+```{r}
+#skorları veriye kaydetme
+df$comp1=fit.pca$x[,1] 
+df$comp2=fit.pca$x[,2] 
+
+#indeks olusturma ### 
+df$index=df$comp1+df$comp2
+indeks<-sort(df$index, decreasing = F)
+head(indeks)# Gözlem sayısı çok olduğunda kullanılablir.
+```
+
+### Değişkenlerin Faktörler Üzerindeki Dağılım Grafiği
+
+```{r}
+fviz_pca_var(fit.pca,col.var="steelblue",
+             repel = TRUE )
+```
+
+
+# Kaynakça
+
+-<https://www.veribilimiokulu.com/r-ile-basit-dogrusal-regresyonbaglanim/>
+
+-<https://www.datasciencearth.com/r-uygulamalari-bolum-2-coklu-dogrusal-regresyon-analizi/>
+
+-<https://www.datasciencearth.com/r-uygulamalari-bolum-1-basit-dogrusal-regresyon-analizi/>
+
+-<https://tevfikbulut.com/2020/07/15/rda-coklu-dogrusal-regresyon-uzerine-bir-vaka-calismasi-a-case-study-on-multiple-linear-regression-mlr-in-r/>
+
+-<https://bookdown.org/burak2358/SARP-TR/coklu-dogrusal-regresyon-ksa-tantm.html>
+
+-<https://www.veribilimiokulu.com/r-ile-makine-ogrenmesi-uygulamalari-dogrusal-regresyon/>
+
+-<https://www.veribilimiokulu.com/r-ile-coklu-dogrusal-regresyonbaglanim-cozumlemesi/>
+
+-<https://towardsdatascience.com/random-forest-in-r-f66adf80ec9>
+
+-<https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62>
+
+-<https://ggplot2.tidyverse.org>
+
+-<https://www.r-graph-gallery.com/ggplot2-package.html>
+
+-<https://plotly.com>
+
+-<https://tr.wikipedia.org/wiki/Otokorelasyon>
+
+-<https://esatis.tubitak.gov.tr/ekitap.htm>
+
+-<https://veribilimcisi.com/2017/07/18/lojistik-regresyon/>
+
+-<https://medium.com/data-science-tr/makine-öğrenmesi-dersleri-4-lojistik-regresyon-304fefab0a49>
+
+-<https://www.veribilimiokulu.com/siniflandirma-notlari/2/>
+
+-<https://www.veribilimiokulu.com/kategorik-veri-analizi-ve-shiny-web-uygulamalari-4/>
+
+-<https://www.veribilimiokulu.com/kategorik-veri-analizi-ve-shiny-web-uygulamalari-6/>
+
+-<https://veribilimcisi.com/2017/07/19/destek-vektor-makineleri-support-vector-machine/>
+
+-<https://medium.com/@k.ulgen90/makine-öğrenimi-bölüm-4-destek-vektör-makineleri-2f8010824054>
+
+-<https://medium.com/deep-learning-turkiye/nedir-bu-destek-vektör-makineleri-makine-öğrenmesi-serisi-2-94e576e4223e>
+
+-<https://en.wikipedia.org/wiki/Support-vector_machine>
+
+-<https://www.datasciencearth.com/algorithmdestek-vektor-makinelerisupport-vector-machinesr-kod-ornekli/>
+
+-<https://jakevdp.github.io/PythonDataScienceHandbook/05.07-support-vector-machines.html>
+
+-<https://medium.com/deep-learning-turkiye/karar-ağaçları-makine-öğrenmesi-serisi-3-a03f3ff00ba5>
+
+-<https://erdincuzun.com/makine_ogrenmesi/decision-tree-karar-agaci-id3-algoritmasi-classification-siniflama/>
+
+-<https://tr.wikipedia.org/wiki/Karar_ağacı>
+
+-<https://www.matematiksel.org/karar-agaci-algoritmalari-nelerdir/>
+
+-<https://www.section.io/engineering-education/introduction-to-random-forest-in-machine-learning/#:~:text=A%20random%20forest%20is%20a%20machine%20learning%20technique%20that%27s%20used,consists%20of%20many%20decision%20trees.>
+
+-<https://devhunteryz.wordpress.com/2018/09/20/rastgele-ormanrandom-forest-algoritmasi/>
+
+-<https://medium.com/cem-berke-cebis-blog/rastgele-orman-algoritması-1600ca4f4784>
+
+-<https://dzone.com/articles/10-interesting-use-cases-for-the-k-means-algorithm>
+
+-<https://medium.com/deep-learning-turkiye/k-means-algoritması-b460620dd02a>
+
+-<https://www.veribilimiokulu.com/kumeleme-notlari-3-k-ortalamalar-kume-sayisini-belirleme/>
+
+-<https://www.veribilimiokulu.com/hiyerarsik-kumeleme/>
+
+-<http://serracelik.com/r-ile-hiyerarsik-kumeleme/>
+
+-Spss Uygulamalı Temel İstatistik Yöntemler 8. Baskı (Prof. Dr. Özkan Ünver - Prof. Dr. Hamza Gamgam - Doç. Dr. Bülent Altunkaynak/Ocak 2016)
+
+-Doğrusal Regresyon Analizine Giriş 5. başkıdan çeviri (Douglas C. Montgoemery - Elizabeth A. Peck - G. Geoffrey Vining/2013)
+
+-<https://www.kaggle.com/huhao05133/carseats>
+
+-<https://worldhappiness.report/ed/2021/#appendices-and-data>
+
+
