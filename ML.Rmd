@@ -117,7 +117,7 @@ Büyük veri, başta bankacılık ve perakende sektörü gibi müşteri davranı
 
 **Büyük veriyi 5 ana bileşen oluşturmaktadır.**
 
--* **Çeşitlilik (Variety):** Üretilen verilerin büyük bir kısmı, birbirinden farklı formata sahiptir. Telefonlardan, tabletlerden, bilgisayarlardan; farklı işletim sistemlerinden ya da dillerden gelen veriler birbirinden farklı formatların ortaya çıkmasına neden olmaktadır.
+- **Çeşitlilik (Variety):** Üretilen verilerin büyük bir kısmı, birbirinden farklı formata sahiptir. Telefonlardan, tabletlerden, bilgisayarlardan; farklı işletim sistemlerinden ya da dillerden gelen veriler birbirinden farklı formatların ortaya çıkmasına neden olmaktadır.
 
 - **Hız (Velocity):** Gün geçtikçe artan teknolojik imkanlar, elde edilen veri miktarının, yapılacak işlem sayısının ve çeşitliliğinin de aynı şekilde artmasına neden olmaktadır.
 
@@ -176,7 +176,7 @@ summary(Carseats)
 ## World Happiness Report Veri Seti
 
 
-İlk Dünya Mutluluk Raporu, BM Yüksek Düzeyli Mutluluk ve refah toplantısını desteklemek üzere Nisan 2012’de yayınlandı. O zamandan beri dünya çok yol kat etti. Mutluluk gittikçe artan bir şekilde sosyal ilerlemenin ve kamu politikasının hedefi için uygun bir ölçü olarak görülmektedir. Haziran 2016’da OECD kendisini “insanların refahını hükümetlerin çabalarının merkezine koymak için büyüme anlatısını yeniden tanımlamayı” taahhüt etti. Şubat 2017’de Birleşik Arap Emirlikleri, Dünya Hükümeti Zirvesi kapsamında tam günlük bir Dünya Mutluluğu toplantısı düzenledi. Şimdi 20 Mart Dünya Mutluluk Günü’nde, bir kez daha Birleşmiş Milletler’de, tekrar Sürdürülebilir Kalkınma Çözümleri Ağı tarafından yayınlanan ve şimdi Ernesto Illy Vakfı’ndan cömert üç yıllık bir bağışla desteklenen Dünya Mutluluk Raporu 2017 oluşturuldu. Çalışmada 2021 yılı için mutluluk verileri kullanılmıştır.
+İlk Dünya Mutluluk Raporu, BM Yüksek Düzeyli Mutluluk ve refah toplantısını desteklemek üzere Nisan 2012’de yayınlandı. O zamandan beri dünya çok yol kat etti. Mutluluk gittikçe artan bir şekilde sosyal ilerlemenin ve kamu politikasının hedefi için uygun bir ölçü olarak görülmektedir. Haziran 2016’da OECD kendisini “*insanların refahını hükümetlerin çabalarının merkezine koymak için büyüme anlatısını yeniden tanımlamayı*” taahhüt etti. Şubat 2017’de Birleşik Arap Emirlikleri, Dünya Hükümeti Zirvesi kapsamında tam günlük bir Dünya Mutluluğu toplantısı düzenledi. Şimdi 20 Mart Dünya Mutluluk Günü’nde, bir kez daha Birleşmiş Milletler’de, tekrar Sürdürülebilir Kalkınma Çözümleri Ağı tarafından yayınlanan ve şimdi Ernesto Illy Vakfı’ndan cömert üç yıllık bir bağışla desteklenen Dünya Mutluluk Raporu 2017 oluşturuldu. Çalışmada 2021 yılı için mutluluk verileri kullanılmıştır.
 
 
 *Country.name(Ülke Adı)
@@ -292,7 +292,7 @@ plot %>%plot_ly(x = ~ShelveLoc, y = ~n, color = ~US)
 
 Verilerin çeyreklik değerlerine göre gösterimidir. Histogram ve nokta çizimleri farklı görünüme sahip olmakla birlikte veri ile ilgili yarıntılı bilgi verir. Konum, yayılım ve çarpıklık ile ilgili bilgi verir. Dağılımın kuyrukları ve bu kuyrukların yayılım ile ilgili bilgi verir. Uç değerleri görmek için olanaktır. Bu değerler aykırı değerde olabilir. Birden fazla veri kümesinin karşılaştırılmasına yararlıdır. Uç değerlere karşı dirençlidir. Grafiğin çizimi için ortanca, birinci ve üçüncü çeyrek değerleri hesaplanır ve
 
-$$DAG (Çeyrekler Arası Uzaklık)=d=Q_3-Q_1$$
+$$DAG (Çeyrekler~~Arası~~Uzaklık)=d=Q_3-Q_1$$
 
 farkı bulunur. $Q_3$ ve $Q_1$ farkı arasında yatay veya dikey eksende kutu çizilir. Kutunun içine ortanca çizgisi çizilir ve her iki ucundan, $A=Q_1-1.5d$ ve $B=Q_3+ 1.5d$ Uzunlukları kuşkulu gözlem sınırları olarak tanımlar. Bunlara eşik değerleri denir.Uç değerler eşik değerlerinin dışında olur ve işaretler.
 
@@ -520,7 +520,7 @@ Yani %95 güven ile değişkenlerin dağılımım normal dağılımdan gelmemekt
 
 **Carseats Veri seti**
 
-| Değişkenler             | Çarpıklık(α_3) | Basıklık(α_4) |
+| Değişkenler             | Çarpıklık($α_3$) | Basıklık($α_4$) |
 |-------------------------|----------------|---------------|
 | Sales          | 0.18          | 2.90       |
 | CompPrice   | -0.04          | 3.02        |
@@ -536,7 +536,7 @@ Carseat veri setindeki Income, Popilation, Price, Age ve education değişkenler
 
 **World Veri Seti**
 
-| Değişkenler             | Çarpıklık(α_3) | Basıklık(α_4) |
+| Değişkenler             | Çarpıklık($α_3$) | Basıklık($α_4$) |
 |-------------------------|----------------|---------------|
 | Ladder.score          | -0.10          | 2.60       |
 | upperwhisker   | -0.11          | 2.63       |
@@ -653,7 +653,7 @@ lm_fit
 Regresyon modeline ilişkin katsayıların sonuçlar incelendiğinde β parametrelerinin tahmini B sütunundadır.
 Bu değerler ile regresyon modeli aşağıdaki gibi olur.
 
-$$Maaş = 5,59+0,092*CompPrice+0,014*Income+0,117*Advertising-0,093*Price$$
+$$Satış = 5,59+0,092*CompPrice+0,014*Income+0,117*Advertising-0,093*Price$$
 
 $$ 4,801*ShelveLoc_{Good}+ 1,936*ShelveLoc_{Medium}- 0,048*Age $$
 
@@ -706,16 +706,16 @@ plot_ly( x = yhat, y = t)
 Grafikte artıkların doğrusal olmayan herhangi bir kalıpta olmadığını gösterir. Artıkların saçılım grafiği incelendiğinde çizilen doğrunun düz çizgiye yakın olduğu görülür. Değişen varyanslılık yoktur.
 
 
-** Otokorelasyon (İlişkili Hatalar)**
+**Otokorelasyon (İlişkili Hatalar)**
 
 ```{r}
 library(lmtest)
 dwtest(lm_fit)
 ```
 
-$$H_0:P=0 (Ototkorelasyan yoktur.)$$
+$$H_0:P=0 (Otokorelasyan~~yoktur.)$$
 
-$$H_A:P≠0 (Otokorelasyon vardır.) $$
+$$H_A:P≠0 (Otokorelasyon~~vardır.) $$
 
 Buna göre Durbin-Watson test istatistiğinin hesaplanan değeri d = 2,0467 olarak elde edilmiştir.
 d=2,0467 değeri 2'yi geçtiği için otokorelasyon vardır denilebilir.
@@ -750,7 +750,7 @@ Modele ait düzeltilmiş $R^2$ ise %87,12'dır.
 
 **Artıkların mutlak ortalaması(MAE):** hatası 0,79 dur. Değerin düşük olması modelin iyi kurulduğunun gösterir.
 
-**Hata Kareler Ortalamasının Kökü (RMSE):** Modelinin, tahminleyicinin tahmin ettiği değerler ile gerçek değerleri arasındaki uzaklığın bulunmasında kullanılır. Değerin 0,99 olması tahmin edicilerin gerçek derelerine yakın olmasıdır. ,
+**Hata Kareler Ortalamasının Kökü (RMSE):** Modelinin, tahminleyicinin tahmin ettiği değerler ile gerçek değerleri arasındaki uzaklığın bulunmasında kullanılır. Değerin 0,99 olması tahmin edicilerin gerçek derelerine yakın olmasıdır.
 
 RMSE ve MAE değerlerinin düşük olması oluşturulan modelin ne kadar iyi olduğunu gösterir.
 
@@ -871,7 +871,7 @@ draw_confusion_matrix <- function(cm) {
 
 ```
 
-** Veri setinde sınıflandırma yapmak için Sales değişkeni kategorize edilmiştir**
+    ** Veri setinde sınıflandırma yapmak için Sales değişkeni kategorize edilmiştir**
 
 
 
@@ -882,7 +882,7 @@ draw_confusion_matrix <- function(cm) {
 Lojistik regresyon, bir sonucu belirleyen bir veya daha fazla bağımsız değişken bulunan bir veri kümesini analiz etmek için kullanılan istatistiksel bir yöntemdir. Sonuç, ikili bir değişkenle ölçülür (yalnızca iki olası sonuç vardır).
 Lojistik regresyonda, bağımlı değişken ikili veya ikili, yani yalnızca 1 (DOĞRU, başarı, hamile vb.) Veya 0 (YANLIŞ, hata, gebe olmayan vb.) Olarak kodlanmış verileri içeriyor.
 
-Lojistik regresyonun amacı,  iki yönlü karakteristiği (bağımlı değişken = yanıt veya sonuç değişkeni) ile ilgili bir dizi bağımsız (öngörücü veya açıklayıcı) değişken arasındaki ilişkiyi tanımlamak için en uygun (henüz biyolojik olarak makul) modeli bulmaktır. Lojistik regresyon, ilgi karakteristiklerinin varlığının olasılığını logit dönüşümünü tahmin etmek için bir formülün katsayılarını (ve standart hatalarını ve önem seviyelerini) üretir:
+Lojistik regresyonun amacı,  iki yönlü karakteristiği (bağımlı değişken = yanıt veya sonuç değişkeni) ile ilgili bir dizi bağımsız (öngörücü veya açıklayıcı) değişken arasındaki ilişkiyi tanımlamak için en uygun (henüz biyolojik olarak makul) modeli bulmaktır. Lojistik regresyon, ilgi karakteristiklerinin varlığının olasılığını logit dönüşümünü tahmin etmek için bir formülün katsayılarını (standart hatalarını ve önem seviyelerini) üretir:
 
 $$logit(p) = b_0+b_1X_1+b_2X_2+...+b_kX_k$$
 
@@ -1102,7 +1102,7 @@ Yapılan tahminlerin doğruluk oranı %89,9 olarak hesaplanmıştır.
 
 ![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/cart.jpg)
 
-Karar ağacı, risklerin, kazançların ve hedeflerin anlaşılmasına yardımcı olan bir teknik türüdür. Aynı zamanda birçok önemli yatırım sahalarında uygulanabilen, birbiriyle bağlantılı şans olaylarıyla ilgili olarak çıkan çeşitli karar noktalarını incelemek için kullanılan bir karar destek aracıdır[1]. Yalnızca koşullu kontrol ifadeleri içeren bir algoritmayı görüntülemenin bir yoludur.
+Karar ağacı, risklerin, kazançların ve hedeflerin anlaşılmasına yardımcı olan bir teknik türüdür. Aynı zamanda birçok önemli yatırım sahalarında uygulanabilen, birbiriyle bağlantılı şans olaylarıyla ilgili olarak çıkan çeşitli karar noktalarını incelemek için kullanılan bir karar destek aracıdır. Yalnızca koşullu kontrol ifadeleri içeren bir algoritmayı görüntülemenin bir yoludur.
 
 Karar ağacı, bir hedefe ulaşma olasılığı en yüksek olan stratejiyi belirlemeye yardımcı olmak için kullanılan bir yöntemdir. Özellikle karar analizinde olmak üzere karmaşık sorunların araştırmasında yaygın olarak kullanılmaktadır.
 
@@ -1180,7 +1180,7 @@ min_tree <- which.min(seat_tree_cv$dev)
 
 ```
 
-**Gorsel Incelenmesi**
+**Görsel İncelenmesi**
 
 ```{r}
 par(mfrow = c(1,2))
@@ -1194,7 +1194,7 @@ plot(seat_tree_cv$size,
 
 
 
-**Bu Sonuclara Gore Agacin Budanmasi**
+**Bu Sonuçlara Göre Ağacın Budanması**
 
 
 ```{r}
@@ -1208,7 +1208,7 @@ text(seat_tree_prune, pretty = 0)
 ```
 
 
-**Sonuclarin Karsilastirilmasi**
+**Sonucların Karşılaştırılması**
 
 ```{r, echo=FALSE}
 # construct the evaluation dataset
@@ -1577,7 +1577,7 @@ Yapılan iki dentogramda da bütün gözlemlerin hangi kümede olduğunu göster
 
 ![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/pc.png)
 
-Temel Bileşenler Analizi; birbirleri ile ilişkili olan çok sayıda değişkenden meydana gelenbirçokk değişkenli sistemi, bu değişkenlerin doğrusal fonksiyonları şeklinde daha az sayıda ve birbirleri ile ilişkisiz ve aynı zamanda önceki sisteme ait toplam değişimi mümkün olduğunca büyük oranda açıklayabilen yeni değişkenlerden meydana gelen sisteme dönüştüren çok değişkenli istatistiksel analiz tekniğidir. Analiz sonucunda oluşan her bir yeni değişkene temel bileşen denir.
+Temel Bileşenler Analizi; birbirleri ile ilişkili olan çok sayıda değişkenden meydana gelen birçok değişkenli sistemi, bu değişkenlerin doğrusal fonksiyonları şeklinde daha az sayıda ve birbirleri ile ilişkisiz ve aynı zamanda önceki sisteme ait toplam değişimi mümkün olduğunca büyük oranda açıklayabilen yeni değişkenlerden meydana gelen sisteme dönüştüren çok değişkenli istatistiksel analiz tekniğidir. Analiz sonucunda oluşan her bir yeni değişkene temel bileşen denir.
 
 
 Temel Bileşenler Analizi’nde p sayıda başlangıç değişkenine karşılık elde edilen p sayıda temel bileşenin her biri, orijinal değişkenlerin doğrusal bir bileşimidir. Dolayısıyla, her bir temel bileşen bünyesinde tüm değişkenlerden belirli oranda bilgiyi barındırır. Bu özelliği sayesinde Temel Bileşenler Analizi, p boyutlu veri kümesi yerine, ilk m önemli temel bileşenin kullanılması yoluyla boyut indirgemesi sağlayabilmektedir. İlk m temel bileşen toplam varyansın büyük kısmını açıklıyorsa, geriye kalan p-m temel bileşen ihmal edilebilir. Klasik değişken seçimi teknikleri ile karşılaştırıldığında bu yöntem ile bilgi kaybı oldukça aza indirilecektir.
