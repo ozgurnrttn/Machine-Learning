@@ -720,7 +720,7 @@ $$H_A:P≠0 (Otokorelasyon~~vardır.) $$
 Buna göre Durbin-Watson test istatistiğinin hesaplanan değeri d = 2,0467 olarak elde edilmiştir.
 d=2,0467 değeri 2'yi geçtiği için otokorelasyon vardır denilebilir.
 
-** VIF (Varyans Şişirme Oranı)
+**VIF (Varyans Şişirme Oranı)**
 
 ```{r, warning=FALSE, message=FALSE}
 library(car)
