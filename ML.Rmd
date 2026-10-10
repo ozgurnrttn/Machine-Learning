@@ -83,7 +83,7 @@ library(pROC)
 
 # Big Data (Büyük Veri)
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/bigdata.jpg)
+![](Regresyon/bigdata.jpg)
 
 **Big Data Nedir?**
 
@@ -160,7 +160,7 @@ Araba koltuğu satışlarını tahmin etmeye çalışacağız. Bu veri setinde, 
 *US(ABD) - Mağazanın ABD'de olup olmadığını belirtmek için Hayır ve Evet seviyelerine sahip bir faktör
 
 ```{r, echo=FALSE}
-Carseats <- read_csv("C:/Users/Reddi/Desktop/MachineLearning/Carseats.csv")
+Carseats <- read_csv("Carseats.csv")
 
 ```
 
@@ -205,7 +205,7 @@ summary(Carseats)
 
 
 ```{r, echo=FALSE}
-world <- read_delim("C:/Users/Reddi/Desktop/MachineLearning/world-happiness-report-2021.csv", 
+world <- read_delim("world-happiness-report-2021.csv", 
     delim = ";", escape_double = FALSE, trim_ws = TRUE)
 
 ```
@@ -296,7 +296,7 @@ $$DAG (Çeyrekler~~Arası~~Uzaklık)=d=Q_3-Q_1$$
 
 farkı bulunur. $Q_3$ ve $Q_1$ farkı arasında yatay veya dikey eksende kutu çizilir. Kutunun içine ortanca çizgisi çizilir ve her iki ucundan, $A=Q_1-1.5d$ ve $B=Q_3+ 1.5d$ Uzunlukları kuşkulu gözlem sınırları olarak tanımlar. Bunlara eşik değerleri denir.Uç değerler eşik değerlerinin dışında olur ve işaretler.
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/box.png)
+![](Regresyon/box.png)
 
 
 ```{r}
@@ -337,7 +337,7 @@ $$Cov(X,Y)=∑(x_i-x ̅)(y_i-y ̅)/n$$
 
 İkiden çok değişken için kovaryans matrisi, pozitif tanımlıdır ve değişkenlerin birlikte değişim miktarı ile ilgili bilgi verir.
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/Correlation.png)
+![](Regresyon/Correlation.png)
 
 **Pearson İlişki Katsayısı**
 
@@ -562,7 +562,7 @@ Perceptions.of.corruption, Generosity değişkeni sivri bir dağılıma sahiptir
 
 Makine öğrenmesi esas olarak 1959 yılında bilgisayar biliminin yapay zekada sayısal öğrenme ve model tanıma çalışmalarından geliştirilmiş bir alt dalıdır. Makine öğrenmesi yapısal işlev olarak öğrenebilen ve veriler üzerinden tahmin yapabilen algoritmaların çalışma ve inşalarını araştıran bir sistemdir. Bu tür algoritmalar statik program talimatlarını harfiyen takip etmek yerine örnek girişlerden veri tabanlı tahminleri ve kararları gerçekleştirebilmek amacıyla bir model inşa ederek çalışırlar. Makine öğrenmesi algoritmaları genel olarak denetimli ve denetimsiz öğrenme olarak iki gruba ayrılır. 
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/ML.png)
+![](Regresyon/ML.png)
 
 
 ## Denetimsiz Öğrenme
@@ -584,7 +584,7 @@ Denetimli öğrenmede, algoritmalar sağladığınız etiketli örnekleri temel 
 
 # Verisetlerinin Parçalanması
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/test-train.png)
+![](Regresyon/test-train.png)
 
 Kullanacağımız modellerin tahmin performansını ölçmek için veriyi train ve test olarak ikiye bölmemiz gerekiyor. Bir verinin hepsini modellere sokmaya çalışırsak hem sağlıklı sonuçlar alamayacağız, hem de kodların çalışması için çok uzun süre beklememiz gerekecek. Bu sebeple %80’i train, %20’i test olacak şekilde rastgele ayırdık.
 
@@ -624,7 +624,7 @@ training <- data.frame(train_x, Urban = train_y)
 
 ## Çoklu Doğrusal Regresyon
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/regression.jpg)
+![](Regresyon/regression.jpg)
 
 k sayıda değişkenin ilişkileri ölçmek için kullanılır.
 
@@ -877,7 +877,7 @@ draw_confusion_matrix <- function(cm) {
 
 ## Lojistik Regresyon
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/lojistic.jpg)
+![](Regresyon/lojistic.jpg)
 
 Lojistik regresyon, bir sonucu belirleyen bir veya daha fazla bağımsız değişken bulunan bir veri kümesini analiz etmek için kullanılan istatistiksel bir yöntemdir. Sonuç, ikili bir değişkenle ölçülür (yalnızca iki olası sonuç vardır).
 Lojistik regresyonda, bağımlı değişken ikili veya ikili, yani yalnızca 1 (DOĞRU, başarı, hamile vb.) Veya 0 (YANLIŞ, hata, gebe olmayan vb.) Olarak kodlanmış verileri içeriyor.
@@ -1036,7 +1036,7 @@ Test verisinde ki atama başarı durumu %48,1'dir
 
 ## SVM (Destek Vektör Makineleri / Support Vector Machine)
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/svm.jpg)
+![](Regresyon/svm.jpg)
 
 “Destek Vektör Makinesi” (SVM), sınıflandırma veya regresyon problemleri için kullanılabilen denetimli bir makine öğrenmesi algoritmasıdır. Bununla birlikte, çoğunlukla sınıflandırma problemlerinde kullanılır. Bu algoritmada, her bir veri maddesini belirli bir koordinatın değeri olan her özelliğin değeri ile birlikte n-boyutlu boşluğa (burada n sahip olduğunuz özelliklerin sayısı) bir nokta olarak çizilir. Ardından, iki sınıftan oldukça iyi ayrım yapan hiper-düzlemi bularak sınıflandırma gerçekleştirilir. Destek Vektörleri, sadece gözlemin koordinatlarıdır. Destek Vektör Makinesi, iki sınıftan (hiper düzlem / çizgi) en iyi ayıran bir sınırdır.
 
@@ -1100,7 +1100,7 @@ Yapılan tahminlerin doğruluk oranı %89,9 olarak hesaplanmıştır.
 
 ## CART ( Karar Ağaçları / Decision Tree )
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/cart.jpg)
+![](Regresyon/cart.jpg)
 
 Karar ağacı, risklerin, kazançların ve hedeflerin anlaşılmasına yardımcı olan bir teknik türüdür. Aynı zamanda birçok önemli yatırım sahalarında uygulanabilen, birbiriyle bağlantılı şans olaylarıyla ilgili olarak çıkan çeşitli karar noktalarını incelemek için kullanılan bir karar destek aracıdır. Yalnızca koşullu kontrol ifadeleri içeren bir algoritmayı görüntülemenin bir yoludur.
 
@@ -1226,7 +1226,7 @@ Doğru Atmama Oranı %72,2 olarak hesaplanmıştır.
 
 ## RF (Rastgele Orman / Random Forest)
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/rf.webp)
+![](Regresyon/rf.webp)
 
 RF, karar ağaçlarına dayanır. Makine öğreniminde karar ağaçları, tahmin modelleri oluşturan denetimli öğrenme tekniğidir. Bunlara karar ağaçları (decision trees) adı verilmektedir. Bu yöntemin özellikle mühendislik bilimlerinde başta sağlık sektörü olmak üzere pek çok sektörde yaygın bir şekilde kullanıldığı görülmektedir.
 
@@ -1358,7 +1358,7 @@ World verisindeki scaler değişkenler seçilerek. Bu değişkenler standardize 
 
 ## K-Means Kümeleme
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/KMeans.gif)
+![](Regresyon/KMeans.gif)
 
 K-Means Kümeleme Algoritması Data Mining Dünyasında En Çok Kullanılan Algoritmaların başında yer almaktadır. K-Means algoritması bir unsupervised learning (denetimsiz öğrenme) ve kümeleme algoritmasıdır. K-Means’ teki K değeri küme sayısını belirler ve bu değeri parametre olarak alması gerekir. K adet özgün küme oluşturduğu ve her kümenin merkezi, kümedeki değerlerin ortalaması olduğu için K-Ortalamalar denmektedir. Algoritma istatistiksel olarak benzer nitelikteki kayıtları aynı gruba sokar. Bir elemanın yalnızca bir kümeye ait olmasına izin verilir.  Küme merkezi kümeyi temsil eden değerdir. Bu algoritmada ‘K’ parametresi elimizdeki verinin kaç tane kümeye ayrılacağını belirtiyor. Bu parametrenin seçimi için birkaç analiz yöntemi olsa da en iyisi algoritmayı farklı k değerlerinde yürütüp işimize en çok yarayanı almaktır. Çünkü farklı sayıda gruplar, farklı özellikleri yüz üstüne çıkarabilir.
 
@@ -1494,7 +1494,7 @@ df %>% as_tibble() %>%
 
 ## Hiyerarşik Kümeleme Analizi
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/clustergram.png)
+![](Regresyon/clustergram.png)
 
 K-Means kümeleme yönteminin bir dezavantajı vardır. Küme sayısını önceden belirlemeniz gerekmektedir. Bu dezavantajı ortadan kaldırmak için hiyerarşik kümeleme geliştirilmiştir. Hiyerarşik kümeleme algoritmasının temel mantığı, benzer özniteliklerin bir araya gelmesine veya tam tersine bölünmesine dayanmaktadır.
 
@@ -1575,7 +1575,7 @@ Yapılan iki dentogramda da bütün gözlemlerin hangi kümede olduğunu göster
 
 ## Temel Bileşen Analizi (PCA)
 
-![](C:/Users/Reddi/Desktop/MachineLearning/Regresyon/pc.png)
+![](Regresyon/pc.png)
 
 Temel Bileşenler Analizi; birbirleri ile ilişkili olan çok sayıda değişkenden meydana gelen birçok değişkenli sistemi, bu değişkenlerin doğrusal fonksiyonları şeklinde daha az sayıda ve birbirleri ile ilişkisiz ve aynı zamanda önceki sisteme ait toplam değişimi mümkün olduğunca büyük oranda açıklayabilen yeni değişkenlerden meydana gelen sisteme dönüştüren çok değişkenli istatistiksel analiz tekniğidir. Analiz sonucunda oluşan her bir yeni değişkene temel bileşen denir.
 
