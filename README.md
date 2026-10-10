@@ -30,7 +30,8 @@ Her sınıflandırma modeli karışıklık matrisiyle değerlendirilir.
 | `ML.html` | Derlenmiş rapor |
 | `Carseats.csv` | 400 mağazanın çocuk oto koltuğu satışları |
 | `world-happiness-report-2021.csv` | 149 ülkenin 2021 mutluluk skorları |
-| `gdp.csv` | Dünya Bankası'ndan 2020 yılı ülke verisi (dünya haritası grafiği için) |
+| `API_NY.GDP.MKTP.CD_...xls` | Dünya Bankası 2020 GSYİH verisi (dünya haritası grafiği için) |
+| `gdp.csv` | Dünya Bankası 2020 kişi başına GSYİH verisi |
 | `Regresyon/` | Raporda kullanılan açıklayıcı görseller |
 
 ## Çalıştırma
@@ -43,13 +44,8 @@ Dosya yolları repo köküne göredir; R'ı bu klasörde açman yeterli. Kullan�
 `tidyverse`, `caret`, `ISLR`, `e1071`, `rpart`, `rpart.plot`, `randomForest`, `glmnet`, `factoextra`,
 `cluster`, `plotly`, `GGally`, `pROC`. Tam liste `ML.Rmd` içindeki `library()` satırlarındadır.
 
-Not: Dünya haritası bölümü, Dünya Bankası'nın GSYİH Excel dosyasını (`API_NY.GDP.MKTP.CD_...xls`)
-okur; bu dosya repoda yok. O bölümü çalıştırmak için dosyayı
-[Dünya Bankası](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD) sayfasından indirip
-`ML.Rmd` içindeki yolu güncelle.
-
 ## Veri
 
 - Carseats: James, Witten, Hastie, Tibshirani, *An Introduction to Statistical Learning* (`ISLR` paketi).
 - World Happiness Report 2021: https://worldhappiness.report/ed/2021/
-- Dünya haritası verisi: [Dünya Bankası](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD).
+- GSYİH: [Dünya Bankası](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), NY.GDP.MKTP.CD göstergesi.

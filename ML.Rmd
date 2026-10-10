@@ -403,7 +403,7 @@ plot_ly(Carseats, x = ~Sales, y = ~Advertising, z = ~Population, color = ~Shelve
 
 ```{r, echo=FALSE, warning=FALSE}
 library(readxl)
-df <- read_excel("C:/Users/Reddi/Desktop/MachineLearning/API_NY.GDP.MKTP.CD_DS2_en_excel_v2_2763979.xls")
+df <- read_excel("API_NY.GDP.MKTP.CD_DS2_en_excel_v2_2763979.xls")
 fig <- plot_ly(df, type='choropleth', locations=df$`Country Code`, z=df$`2020`, text=df$`Country Name`, colorscale="Blues")
 fig <- fig %>% layout(
     title = '2020 Global GDP<br>Source:<a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD">THE WORLD BANK</a>'
